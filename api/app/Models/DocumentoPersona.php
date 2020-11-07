@@ -5,17 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Sistema extends Model
+class DocumentoPersona extends Model
 {
     use HasFactory;
-    protected $table = "sistema";
+    protected $table = "documentopersona";
     protected $primaryKey = 'Codigo';
     public $timestamps = false;
     protected $fillable = [
         'Codigo',
         'Nombre',
-        'Descripcion',
-        'Icono',
+        'CodigoSUNAT',
+        'Tipo',
+        'CantidadMinima',
+        'CantidadMaxima',
         'Vigencia'
     ];
 }

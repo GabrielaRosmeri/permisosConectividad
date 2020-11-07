@@ -13,7 +13,7 @@ use Tymon\JWTAuth\Facades\JWTFactory;
 
 class UsuarioController extends Controller
 {
-    public function BuscarUsuario(Request $request)
+    public function login(Request $request)
     {
         // ? VALIADACION POR PARTE DEL BACKEND
         $validacion = Validator::make($request->all(), [
@@ -36,7 +36,7 @@ class UsuarioController extends Controller
                 $token = JWTAuth::encode($payload);
                 return response()->json(array(
                     "perfil" => $usuario->CodigoPerfil,
-                    "personal" => $personal->Nombres . " " . $personal->ApellidoPaterno . " " . $personal->ApellidoMaterno,
+                    "usuario" => $personal->Nombres . " " . $personal->ApellidoPaterno . " " . $personal->ApellidoMaterno,
                     "token" => $token->get()
                 ), 200);
             } else {

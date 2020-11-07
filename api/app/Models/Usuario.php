@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Usuario extends Model
 {
     use HasFactory;
+    protected $table = "usuario";
+    protected $primaryKey = 'Codigo';
+    public $timestamps = false;
+    protected $fillable = [
+        'Codigo',
+        'CodigoPersonal',
+        'CodigoPerfil',
+        'Nombre',
+        'Clave',
+        'CodigoLocal',
+        'Vigencia'
+    ];
 }

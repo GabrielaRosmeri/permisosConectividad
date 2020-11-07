@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color="indigo darken-4" dark>
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="drawer = true" v-if="$route.name != 'Login'"></v-app-bar-nav-icon>
       <div class="d-flex align-center"></div>
       <h2>Bienvenido</h2>
       <v-spacer></v-spacer>
