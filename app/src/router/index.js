@@ -25,9 +25,7 @@ const routes = [
     name: 'Home',
     component: Home,
     meta: {
-      auth: true,
-      admin: true,
-      personal: true
+      auth: true
     },
   },
 ]

@@ -19,12 +19,14 @@
                     />
                     <v-text-field
                       v-model="clave"
+                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                      :type="show1 ? 'text' : 'password'"
                       prepend-icon="mdi-lock"
                       label="Contraseña"
                       placeholder="Contraseña"
-                      type="password"
                       :rules="[fieldRules.required]"
                       @click="limpiarValidate"
+                      @click:append="show1 = !show1"
                     />
                   </v-card-text>
                   <v-layout align-center justify-center>
@@ -65,6 +67,7 @@ export default {
     valid: true,
     enviando: false,
     ingresando: false,
+    show1: false,
     usuario: "",
     clave: "",
     fieldRules: {
@@ -104,6 +107,7 @@ export default {
             text: "Credenciales Incorrectas",
             icon: "error",
             confirmButtonText: "OK",
+            width: "400px",
           });
           this.ingresando = false;
         }
@@ -118,6 +122,5 @@ export default {
   },
 };
 </script>
-
 <style>
 </style>

@@ -1,18 +1,56 @@
 <template>
   <v-app>
     <v-app-bar app color="indigo darken-4" dark>
-      <v-app-bar-nav-icon @click="drawer = true" v-if="$route.name != 'Login'"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        @click="drawer = true"
+        v-if="$route.name != 'Login'"
+      ></v-app-bar-nav-icon>
       <div class="d-flex align-center"></div>
-      <h2>Bienvenido</h2>
+      <h2>{{ user ? user.empresa : "" }}</h2>
       <v-spacer></v-spacer>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" app temporary>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="title">Aplicacion</v-list-item-title>
-          <v-list-item-subtitle></v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      temporary
+      v-if="$route.name != 'Login'"
+      class="mx-auto"
+      width="350"
+    >
+      <v-system-bar color="indigo darken-4"></v-system-bar>
+      <v-list>
+        <v-list-item link>
+          <v-list-item-content>
+            <v-row justify-center>
+              <v-col cols="12" sm="12">
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-img
+                      :src="user.logo ? user.logo : getImgUrl()"
+                    ></v-img>
+                  </v-list-item-avatar>
+                </v-list-item>
+                <v-list-item-title class="title">
+                  {{ user ? user.usuario : "" }}
+                </v-list-item-title>
+                <v-list-item-subtitle>{{
+                  user ? user.correo : ""
+                }}</v-list-item-subtitle>
+              </v-col>
+            </v-row>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <v-divider></v-divider>
+      <v-container>
+        <v-row>
+          <v-col cols="12" sm="12">
+            <v-btn text color="primary" @click="cerrarSession" block>
+              <v-icon left>mdi-arrow-right-thick</v-icon>Salir
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-navigation-drawer>
     <v-main>
       <!-- <v-btn color="success" @click="cambiarTitulo" >Cambiar titulo</v-btn> -->
@@ -22,7 +60,8 @@
 </template>
 
 <script>
-
+import { mapState } from "vuex";
+import { removeUser } from "./api/api";
 export default {
   name: "App",
 
@@ -31,6 +70,17 @@ export default {
   data: () => ({
     drawer: true,
   }),
-  methods: {},
+  methods: {
+    cerrarSession() {
+      removeUser();
+      this.$router.push("/login");
+    },
+    getImgUrl() {
+      return require("@/assets/user.svg");
+    },
+  },
+  computed: {
+    ...mapState(["user"]),
+  },
 };
 </script>
