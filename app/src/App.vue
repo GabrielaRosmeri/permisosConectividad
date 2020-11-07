@@ -15,7 +15,7 @@
       temporary
       v-if="$route.name != 'Login'"
       class="mx-auto"
-      width="350"
+      width="300"
     >
       <v-system-bar color="indigo darken-4"></v-system-bar>
       <v-list>
