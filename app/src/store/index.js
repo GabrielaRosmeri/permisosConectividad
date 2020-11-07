@@ -13,6 +13,7 @@ export default new Vuex.Store({
   mutations: {
     updateUser(state) {
       state.user = getUser();
+      state.admin = state.user.perfil === 1 ? true : false;
     },
   },
 })

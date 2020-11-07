@@ -25,9 +25,7 @@
               <v-col cols="12" sm="12">
                 <v-list-item>
                   <v-list-item-avatar>
-                    <v-img
-                      :src="user.logo ? user.logo : getImgUrl()"
-                    ></v-img>
+                    <v-img :src="user.logo ? user.logo : getImgUrl()"></v-img>
                   </v-list-item-avatar>
                 </v-list-item>
                 <v-list-item-title class="title">
@@ -40,6 +38,32 @@
             </v-row>
           </v-list-item-content>
         </v-list-item>
+        <v-divider></v-divider>
+        <v-list-group v-if="admin" prepend-icon="mdi-settings" no-action>
+          <template v-slot:activator>
+            <v-list-item-content>
+              <v-list-item-title>Mantenimiento</v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list-item to="/usuario" link>
+            <v-list-item-icon>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>Usuario</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item to="" link>
+            <v-list-item-icon>
+              <v-icon>mdi-home-variant</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>Local</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
       </v-list>
       <v-divider></v-divider>
       <v-container>
@@ -62,6 +86,7 @@
 <script>
 import { mapState } from "vuex";
 import { removeUser } from "./api/api";
+import store from "./store/index";
 export default {
   name: "App",
 
@@ -81,6 +106,10 @@ export default {
   },
   computed: {
     ...mapState(["user"]),
+    ...mapState(["admin"]),
+  },
+  created() {
+    store.commit("updateUser");
   },
 };
 </script>

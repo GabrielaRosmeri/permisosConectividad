@@ -28,6 +28,26 @@ const routes = [
       auth: true
     },
   },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
+    meta: {
+      auth: false,
+      admin: false,
+      personal: false
+    },
+  },
+  {
+    path: "/usuario",
+    name: "Usuario",
+    component: () => import("../views/Usuario.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
 ]
 
 const router = new VueRouter({
