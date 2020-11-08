@@ -55,12 +55,14 @@
               :headers="headers"
               :items="usuarios"
               :loading="loading"
+              :item-class="itemFilaColor"
             >
               <template v-slot:top>
                 <v-switch
                   v-model="todosU"
                   label="Todos los usuarios"
                   class="pt-0 pl-3"
+                  :disabled="disabled"
                   @change="changeUsuario"
                 ></v-switch>
               </template>
@@ -102,6 +104,7 @@ export default {
     todosU: false,
     valid: true,
     loading: false,
+    disabled: true,
     fieldRules: {
       required: (v) => !!v || "Campo requerido",
     },
@@ -138,6 +141,9 @@ export default {
     validate() {
       this.$refs.form.validate();
     },
+    itemFilaColor: function (item) {
+      return item.Vigencia ? "black--text" : "red--text";
+    },
     limpiarValidate() {
       this.$refs.form.resetValidation();
     },
@@ -161,6 +167,12 @@ export default {
       if (this.valid == false) return;
       this.loading = true;
       post("usuarios", this.assembleUser()).then((data) => {
+        console.log(data.length);
+        if (data.length === 0) {
+          this.disabled = true;
+        } else {
+          this.disabled = false;
+        }
         this.loading = false;
         this.usuarios = data;
       });

@@ -68,7 +68,7 @@ class UsuarioController extends Controller
             ->join('personal as p', 'p.Codigo', '=', 'u.CodigoPersonal')
             ->join('local as l', 'l.Codigo', '=', 'u.CodigoLocal')
             ->join('empresa as e', 'e.Codigo', '=', 'l.CodigoEmpresa')
-            ->select('u.Codigo', DB::raw('CONCAT(p.Nombres ,"  ", p.ApellidoPaterno ,"  ", p.ApellidoMaterno) as Nombres'), 'l.Nombre as Local', 'pf.Nombre as Perfil')
+            ->select('u.Codigo', DB::raw('CONCAT(p.Nombres ,"  ", p.ApellidoPaterno ,"  ", p.ApellidoMaterno) as Nombres'), 'l.Nombre as Local', 'pf.Nombre as Perfil','u.Vigencia')
             ->where('pf.Codigo', '=', 2)
             ->where('e.Codigo', '=', $request->get('empresa'))
             ->Where($atributo, 'like', "%{$busqueda}%")
