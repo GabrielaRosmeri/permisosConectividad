@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { post, setUser } from "../api/api";
+import { post, setUser, getUser } from "../api/api";
 import Swal from "sweetalert2";
 export default {
   data: () => ({
@@ -100,6 +100,7 @@ export default {
             timer: 2500,
           });
           setUser({ ...respuesta, name: this.usuario });
+          getUser();
           this.$router.push("/");
         } else {
           Swal.fire({

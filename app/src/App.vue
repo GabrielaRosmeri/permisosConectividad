@@ -80,7 +80,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { removeUser } from "./api/api";
+import { removeUser, getUser} from "./api/api";
 import store from "./store/index";
 export default {
   name: "App",
@@ -89,6 +89,7 @@ export default {
 
   data: () => ({
     drawer: true,
+    itemContent : []
   }),
   methods: {
     cerrarSession() {
@@ -104,8 +105,11 @@ export default {
     ...mapState(["admin"]),
   },
   created() {
+    getUser();
     store.commit("updateUser");
-    this.itemContent = this.user.opciones;
+    if (this.user != null) {
+      this.itemContent = this.user.opciones;
+    }
   },
 };
 </script>

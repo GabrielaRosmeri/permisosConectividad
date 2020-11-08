@@ -51,13 +51,13 @@ class UsuarioController extends Controller
                     ->where('u.Codigo', '=', $usuario->Codigo)
                     ->get()
                     ->first();
-                $opciones = DB::table('perfil as p')
-                    ->join('permisoperfil as pp', 'pp.CodigoPerfil', '=', 'p.Codigo')
-                    ->join('opcion as o', 'o.Codigo', '=', 'pp.CodigoOpcion')
+                $opciones = DB::table('usuario as u')
+                    ->join('permisousuario as pu', 'pu.CodigoUsuario', '=', 'u.Codigo')
+                    ->join('opcion as o', 'o.Codigo', '=', 'pu.CodigoOpcion')
                     ->join('sistema as s', 's.Codigo', '=', 'o.CodigoSistema')
                     ->select('s.Codigo as sistema', 's.Nombre as sistemaNombre', 's.icono as icono', 'o.Nombre', 'o.URL')
-                    ->where('p.Codigo', '=', $usuario->CodigoPerfil)
-                    ->where('pp.Permitido', '=', 1)
+                    ->where('u.Codigo', '=', $usuario->Codigo)
+                    ->where('pu.Permitido', '=', 1)
                     ->get();
                 // dd($opciones);
                 $opciones = agruparSistema($opciones);
