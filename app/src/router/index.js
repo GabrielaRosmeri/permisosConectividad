@@ -15,9 +15,7 @@ const routes = [
     name: "Login",
     component: () => import("../views/Login.vue"),
     meta: {
-      auth: false,
-      admin: false,
-      personal: false
+      auth: false
     },
   },
   {
@@ -33,15 +31,29 @@ const routes = [
     name: "Login",
     component: () => import("../views/Login.vue"),
     meta: {
-      auth: false,
-      admin: false,
-      personal: false
+      auth: false
     },
   },
   {
     path: "/usuario",
     name: "Usuario",
     component: () => import("../views/Usuario.vue"),
+    meta: {
+      auth: true
+    },
+  },
+  {
+    path: "/configuracionPerfil",
+    name: "ConfigPerfil",
+    component: () => import("../views/ConfigPerfil.vue"),
+    meta: {
+      auth: true
+    },
+  },
+  {
+    path: "/configuracionUsuarios",
+    name: "ConfigUsuario",
+    component: () => import("../views/ConfigUsuario.vue"),
     meta: {
       auth: true,
       admin: true,
