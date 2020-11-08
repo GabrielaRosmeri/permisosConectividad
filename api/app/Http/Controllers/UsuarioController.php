@@ -16,6 +16,20 @@ class UsuarioController extends Controller
 {
     public function login(Request $request)
     {
+        function agruparSistema($array)
+        {
+            $resultado = array();
+            foreach ($array as $sistema) {;
+                if (!isset($resultado[$sistema->sistema])) {
+                    $resultado[$sistema->sistema] = $sistema;
+                }
+                if (!isset($resultado[$sistema->sistema]->opciones)) {
+                    $resultado[$sistema->sistema]->opciones = array();
+                }
+                array_push($resultado[$sistema->sistema]->opciones, array("opcion" => $sistema->Nombre, "url" => $sistema->URL));
+            }
+            return array_values($resultado);
+        }
         // ? VALIADACION POR PARTE DEL BACKEND
         $validacion = Validator::make($request->all(), [
             'Nombre' => 'required|max:30',
@@ -25,7 +39,7 @@ class UsuarioController extends Controller
             return response()->json($validacion, 400);
         }
         // ? BUSCAR NOMBRE INGRESANDO POR EL USUARIO
-        $usuario = Usuario::where('Nombre', '=', $request->Nombre)->get()->first();
+        $usuario = Usuario::where('Nombre', '=', $request->get('Nombre'))->get()->first();
         if ($usuario) {
             // ? COMPARAR CLAVE
             if (Hash::check($request->get('Clave'), $usuario->Clave)) {
@@ -37,6 +51,16 @@ class UsuarioController extends Controller
                     ->where('u.Codigo', '=', $usuario->Codigo)
                     ->get()
                     ->first();
+                $opciones = DB::table('perfil as p')
+                    ->join('permisoperfil as pp', 'pp.CodigoPerfil', '=', 'p.Codigo')
+                    ->join('opcion as o', 'o.Codigo', '=', 'pp.CodigoOpcion')
+                    ->join('sistema as s', 's.Codigo', '=', 'o.CodigoSistema')
+                    ->select('s.Codigo as sistema', 's.Nombre as sistemaNombre', 'o.Nombre', 'o.URL')
+                    ->where('p.Codigo', '=', $usuario->CodigoPerfil)
+                    ->where('pp.Permitido', '=', 1)
+                    ->get();
+                // dd($opciones);
+                $opciones = agruparSistema($opciones);
                 $factory = JWTFactory::customClaims([
                     'sub' => env('API_id'),
                 ]);
@@ -49,6 +73,7 @@ class UsuarioController extends Controller
                     "logo" => $empresa->Logo,
                     "empresa" => $empresa->RazonSocial,
                     "empresaId" => $empresa->Codigo,
+                    "opciones" => $opciones,
                     "token" => $token->get()
                 ), 200);
             } else {
@@ -68,7 +93,7 @@ class UsuarioController extends Controller
             ->join('personal as p', 'p.Codigo', '=', 'u.CodigoPersonal')
             ->join('local as l', 'l.Codigo', '=', 'u.CodigoLocal')
             ->join('empresa as e', 'e.Codigo', '=', 'l.CodigoEmpresa')
-            ->select('u.Codigo', DB::raw('CONCAT(p.Nombres ,"  ", p.ApellidoPaterno ,"  ", p.ApellidoMaterno) as Nombres'), 'l.Nombre as Local', 'pf.Nombre as Perfil','u.Vigencia')
+            ->select('u.Codigo', DB::raw('CONCAT(p.Nombres ,"  ", p.ApellidoPaterno ,"  ", p.ApellidoMaterno) as Nombres'), 'l.Nombre as Local', 'pf.Nombre as Perfil', 'u.Vigencia')
             ->where('pf.Codigo', '=', 2)
             ->where('e.Codigo', '=', $request->get('empresa'))
             ->Where($atributo, 'like', "%{$busqueda}%")
