@@ -33,7 +33,7 @@ class UsuarioController extends Controller
                 $empresa = DB::table('usuario as u')
                     ->join('local as l', 'l.Codigo', '=', 'u.CodigoLocal')
                     ->join('empresa as e', 'e.Codigo', '=', 'l.CodigoEmpresa')
-                    ->select('e.Logo', 'e.RazonSocial')
+                    ->select('e.Logo', 'e.RazonSocial','e.Codigo')
                     ->where('u.Codigo', '=', $usuario->Codigo)
                     ->get()
                     ->first();
@@ -48,6 +48,7 @@ class UsuarioController extends Controller
                     "correo" => $personal->Correo,
                     "logo" => $empresa->Logo,
                     "empresa" => $empresa->RazonSocial,
+                    "empresaId" => $empresa->Codigo,
                     "token" => $token->get()
                 ), 200);
             } else {
@@ -56,5 +57,23 @@ class UsuarioController extends Controller
         } else {
             return response()->json(array("mensaje" => "usuario_no_registrado"), 400);
         }
+    }
+
+    public function lista(Request $request)
+    {
+        $atributo = $request->get('atributo');
+        $busqueda = $request->get('busqueda');
+        $usuario = DB::table('usuario as u')
+            ->join('perfil as pf', 'pf.Codigo', '=', 'u.CodigoPerfil')
+            ->join('personal as p', 'p.Codigo', '=', 'u.CodigoPersonal')
+            ->join('local as l', 'l.Codigo', '=', 'u.CodigoLocal')
+            ->join('empresa as e', 'e.Codigo', '=', 'l.CodigoEmpresa')
+            ->select('u.Codigo', DB::raw('CONCAT(p.Nombres ,"  ", p.ApellidoPaterno ,"  ", p.ApellidoMaterno) as Nombres'), 'l.Nombre as Local', 'pf.Nombre as Perfil')
+            ->where('pf.Codigo', '=', 2)
+            ->where('e.Codigo', '=', $request->get('empresa'))
+            ->Where($atributo, 'like', "%{$busqueda}%")
+            ->get();
+
+        return response()->json($usuario, 200);
     }
 }
