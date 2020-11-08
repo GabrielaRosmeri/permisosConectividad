@@ -40,7 +40,7 @@
         </v-list-item>
         <v-divider></v-divider>
         <v-list v-for="(sistema, i) in itemContent" :key="i">
-          <v-list-group prepend-icon="mdi-settings" no-action>
+          <v-list-group :prepend-icon="sistema.icono" no-action>
             <template v-slot:activator>
               <v-list-item-content>
                 <v-list-item-title

@@ -55,7 +55,7 @@ class UsuarioController extends Controller
                     ->join('permisoperfil as pp', 'pp.CodigoPerfil', '=', 'p.Codigo')
                     ->join('opcion as o', 'o.Codigo', '=', 'pp.CodigoOpcion')
                     ->join('sistema as s', 's.Codigo', '=', 'o.CodigoSistema')
-                    ->select('s.Codigo as sistema', 's.Nombre as sistemaNombre', 'o.Nombre', 'o.URL')
+                    ->select('s.Codigo as sistema', 's.Nombre as sistemaNombre', 's.icono as icono', 'o.Nombre', 'o.URL')
                     ->where('p.Codigo', '=', $usuario->CodigoPerfil)
                     ->where('pp.Permitido', '=', 1)
                     ->get();

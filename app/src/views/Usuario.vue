@@ -69,12 +69,19 @@
               <template v-slot:[`item.index`]="{ item }">
                 {{ usuarios.indexOf(item) + 1 }}
               </template>
-              <template v-slot:[`item.action`]="{ item }">
-                <v-icon
-                  class="mr-2"
-                  @click="configuraciones(item)"
-                  >mdi-pencil</v-icon
-                >
+              <template v-slot:[`item.action`]>
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                      Dropdown
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item v-for="(item, index) in items" :key="index">
+                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </template>
             </v-data-table>
           </v-card>
