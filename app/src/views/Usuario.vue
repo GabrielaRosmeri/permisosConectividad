@@ -18,7 +18,7 @@
         <v-col cols="10" align="center">
           <v-card>
             <v-card-title align="center">
-              <v-row align="center" justify-center class="text-center">
+              <v-row align="center" justify-center class="text-center pb-0">
                 <v-form ref="form" v-model="valid" lazy-validation>
                   <v-col class="d-flex" align="center" cols="12" sm="12">
                     <v-select
@@ -41,7 +41,7 @@
                     <v-btn
                       icon
                       color="indigo darken-4"
-                      class="pa-8"
+                      class="pt-8"
                       @mousedown="validate"
                       @click="busquedaUsuario"
                     >
@@ -51,7 +51,19 @@
                 </v-form>
               </v-row>
             </v-card-title>
-            <v-data-table :headers="headers" :items="usuarios">
+            <v-data-table
+              :headers="headers"
+              :items="usuarios"
+              :loading="loading"
+            >
+              <template v-slot:top>
+                <v-switch
+                  v-model="todosU"
+                  label="Todos los usuarios"
+                  class="pt-0 pl-3"
+                  @change="changeUsuario"
+                ></v-switch>
+              </template>
               <template v-slot:[`item.index`]="{ item }">
                 {{ usuarios.indexOf(item) + 1 }}
               </template>
@@ -87,7 +99,9 @@ import { mapState } from "vuex";
 import { post } from "../api/api";
 export default {
   data: () => ({
+    todosU: false,
     valid: true,
+    loading: false,
     fieldRules: {
       required: (v) => !!v || "Campo requerido",
     },
@@ -115,6 +129,7 @@ export default {
     busqueda: "",
     atributo: "",
     usuarios: [],
+    estadoU: [1],
   }),
   computed: {
     ...mapState(["user"]),
@@ -126,16 +141,27 @@ export default {
     limpiarValidate() {
       this.$refs.form.resetValidation();
     },
+    changeUsuario() {
+      if (this.todosU === true) {
+        this.estadoU = [1, 0];
+      } else {
+        this.estadoU = [1];
+      }
+      this.busquedaUsuario();
+    },
     assembleUser() {
       return {
         atributo: this.atributo,
         busqueda: this.busqueda,
-        empresa: this.empresa, // y la antigua? ay
+        empresa: this.empresa,
+        vigencia: this.estadoU,
       };
     },
     busquedaUsuario() {
       if (this.valid == false) return;
+      this.loading = true;
       post("usuarios", this.assembleUser()).then((data) => {
+        this.loading = false;
         this.usuarios = data;
       });
     },

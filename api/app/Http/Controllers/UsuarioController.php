@@ -33,7 +33,7 @@ class UsuarioController extends Controller
                 $empresa = DB::table('usuario as u')
                     ->join('local as l', 'l.Codigo', '=', 'u.CodigoLocal')
                     ->join('empresa as e', 'e.Codigo', '=', 'l.CodigoEmpresa')
-                    ->select('e.Logo', 'e.RazonSocial','e.Codigo')
+                    ->select('e.Logo', 'e.RazonSocial', 'e.Codigo')
                     ->where('u.Codigo', '=', $usuario->Codigo)
                     ->get()
                     ->first();
@@ -72,6 +72,7 @@ class UsuarioController extends Controller
             ->where('pf.Codigo', '=', 2)
             ->where('e.Codigo', '=', $request->get('empresa'))
             ->Where($atributo, 'like', "%{$busqueda}%")
+            ->whereIn('u.Vigencia', $request->get('vigencia'))
             ->get();
 
         return response()->json($usuario, 200);
