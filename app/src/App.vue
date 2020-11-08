@@ -18,14 +18,14 @@
       width="300"
     >
       <v-system-bar color="indigo darken-4"></v-system-bar>
-      <v-list>
+      <v-list v-if="$route.name != 'Login'">
         <v-list-item link>
           <v-list-item-content>
             <v-row justify-center>
               <v-col cols="12" sm="12">
-                <v-list-item>
+                <v-list-item >
                   <v-list-item-avatar>
-                    <v-img :src="user.logo ? user.logo : getImgUrl()"></v-img>
+                    <v-img :src="user ? user.logo : getImgUrl()"></v-img>
                   </v-list-item-avatar>
                 </v-list-item>
                 <v-list-item-title class="title">

@@ -69,24 +69,12 @@
               <template v-slot:[`item.index`]="{ item }">
                 {{ usuarios.indexOf(item) + 1 }}
               </template>
-              <template v-slot:[`item.actions`]="{ item }">
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-icon
-                      v-bind="attrs"
-                      v-on="on"
-                      color="blue-grey"
-                      class="mr-2"
-                    >
-                      {{
-                        item.Vigencia
-                          ? "mdi-close-circle-outline"
-                          : "mdi-checkbox-marked-circle-outline"
-                      }}
-                    </v-icon>
-                  </template>
-                  <span>Editar</span>
-                </v-tooltip>
+              <template v-slot:[`item.action`]="{ item }">
+                <v-icon
+                  class="mr-2"
+                  @click="configuraciones(item)"
+                  >mdi-pencil</v-icon
+                >
               </template>
             </v-data-table>
           </v-card>
