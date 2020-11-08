@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PermisoUsuarioController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,3 +22,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('login', [UsuarioController::class, 'login']);
 Route::post('usuarios', [UsuarioController::class, 'lista'])->middleware('token');
+Route::post('listaLocales', [PermisoUsuarioController::class, 'ListarLocal'])->middleware('token');
