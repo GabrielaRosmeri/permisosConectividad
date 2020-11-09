@@ -1,6 +1,6 @@
 <template>
   <v-content>
-    <v-row class="pa-2" align="center">
+    <!-- <v-row class="pa-2" align="center">
       <v-col cols="12">
         <h2 class="font-weight-regular text-center">
           Mantenimiento de Usuario
@@ -76,7 +76,7 @@
           </v-card>
         </v-col>
       </v-col>
-    </v-row>
+    </v-row> -->
   </v-content>
 </template>
 

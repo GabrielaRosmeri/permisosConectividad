@@ -46,7 +46,7 @@
               <v-divider></v-divider>
               <v-subheader>Permisos por usuarios</v-subheader>
               <v-col cols="4" class="text-left">
-                <v-treeview selectable :items="opciones"></v-treeview>
+                <v-treeview selectable :items="opciones" selected-color="indigo darken-4"></v-treeview>
               </v-col>
             </v-container>
           </v-card-text>
