@@ -9,24 +9,39 @@
           <v-card-text>
             <v-container class="pt-3">
               <v-subheader>Empleados</v-subheader>
-              <v-row class="justify-center">
-                <v-col cols="2">
-                  <v-select
-                    v-model="local"
-                    :items="locales"
-                    label="Seleccionar local"
-                    persistent-hint
-                  ></v-select>
-                </v-col>
-                <v-col cols="6">
-                  <v-select
-                    v-model="empleado"
-                    :items="empleados"
-                    label="Seleccionar empleados"
-                    persistent-hint
-                  ></v-select>
-                </v-col>
-              </v-row>
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <v-row class="justify-center">
+                  <v-col cols="2">
+                    <v-select
+                      v-model="local"
+                      :items="locales"
+                      label="Seleccionar local"
+                      persistent-hint
+                      :rules="[fieldRules.required]"
+                      @change="busquedaEmpleado"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="8">
+                    <v-select
+                      v-model="empleado"
+                      :items="empleados"
+                      label="Seleccionar empleados"
+                      persistent-hint
+                      :rules="[fieldRules.required]"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="2">
+                    <v-btn
+                      icon
+                      color="indigo darken-4"
+                      class="pt-8"
+                      @mousedown="validate"
+                    >
+                      <v-icon>mdi-magnify</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-form>
               <v-divider></v-divider>
               <v-subheader>Permisos por usuarios</v-subheader>
               <v-treeview selectable></v-treeview>
@@ -47,11 +62,18 @@ export default {
     locales: [],
     empleados: [],
     empleado: null,
+    valid: true,
+    fieldRules: {
+      required: (v) => !!v || "Campo requerido",
+    },
   }),
   computed: {
     ...mapState(["user"]),
   },
   methods: {
+    validate() {
+      this.$refs.form.validate();
+    },
     assembleLocal() {
       return {
         empresa: this.empresa,
@@ -62,6 +84,16 @@ export default {
         this.locales = data;
       });
     },
+    assembleEmpleado() {
+      return {
+        local: this.local,
+      };
+    },
+    busquedaEmpleado(){
+        post("listaEmpleados", this.assembleEmpleado()).then((data) => {
+        this.empleados = data;
+      });
+    }
   },
   created() {
     this.empresa = this.user.empresaId;

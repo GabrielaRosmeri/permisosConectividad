@@ -21,4 +21,20 @@ class PermisoUsuarioController extends Controller
 
         return response()->json($respuesta, 200);
     }
+
+    public function ListarEmpleados(Request $request)
+    {
+        $respuesta = [];
+        $empleados = DB::table('usuario as u')
+            ->join('personal as p', 'p.Codigo', '=', 'u.CodigoPersonal')
+            ->select('p.Nombres', 'p.ApellidoPaterno', 'p.ApellidoMaterno', 'p.Codigo')
+            ->where('u.CodigoLocal', '=', $request->get('local'))
+            ->where('u.CodigoPerfil', '!=', 1)
+            ->get();
+        foreach ($empleados as $emple) {
+            array_push($respuesta, array("text" => $emple->Nombres . " " . $emple->ApellidoPaterno . " " . $emple->ApellidoMaterno, "value" => $emple->Codigo));
+        }
+
+        return response()->json($respuesta, 200);
+    }
 }

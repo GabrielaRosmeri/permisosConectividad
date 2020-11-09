@@ -23,3 +23,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', [UsuarioController::class, 'login']);
 Route::post('usuarios', [UsuarioController::class, 'lista'])->middleware('token');
 Route::post('listaLocales', [PermisoUsuarioController::class, 'ListarLocal'])->middleware('token');
+Route::post('listaEmpleados', [PermisoUsuarioController::class, 'ListarEmpleados'])->middleware('token');
