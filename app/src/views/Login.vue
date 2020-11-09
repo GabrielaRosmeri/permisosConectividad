@@ -34,8 +34,9 @@
                       <v-btn
                         xs6
                         type="submit"
-                        block
-                        color="primary"
+                        rounded
+                        color="#292664"
+                        class="white--text"
                         @mousedown="validate"
                       >
                         <span v-if="!ingresando">Ingresar</span>
@@ -94,9 +95,10 @@ export default {
           Swal.fire({
             position: "top-end",
             title: "Sistema",
-            text: "Bienvenido" + this.usuario,
+            text: "Bienvenido \n" + this.usuario,
             icon: "success",
             confirmButtonText: "OK",
+            width: "400px",
             timer: 2500,
           });
           setUser({ ...respuesta, name: this.usuario });

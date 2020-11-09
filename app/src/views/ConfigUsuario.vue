@@ -3,7 +3,7 @@
     <v-row align="center" justify-center class="text-center pl-10 pr-10">
       <v-col cols="12" align="center" justify-center class="text-center">
         <v-card>
-          <v-card-title class="headline indigo lighten-4 pa-2 white--text">
+          <v-card-title class="headline pa-2 white--text" style="background-color:#b5ccf1">
             <h6 class="pl-3">Gestionar permisos usuarios</h6>
           </v-card-title>
           <v-card-text>
@@ -79,6 +79,7 @@
 <script>
 import { mapState } from "vuex";
 import { post } from "../api/api";
+import Swal from "sweetalert2";
 export default {
   data: () => ({
     selectionType: "leaf",
@@ -145,8 +146,18 @@ export default {
       };
     },
     guardarOpcionesEmpleado() {
+      this.edit = true;
       post("registrarOpcion", this.assembleRegistrar()).then(() => {
         this.cargarOpciones();
+        Swal.fire({
+          position: "top-end",
+          title: "Sistema",
+          text: "Opciones actualizados.",
+          icon: "success",
+          confirmButtonText: "OK",
+          width: "400px",
+          timer: 2500,
+        });
       });
     },
   },
