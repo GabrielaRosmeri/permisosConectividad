@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PermisoUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +28,7 @@ class PermisoUsuarioController extends Controller
         $respuesta = [];
         $empleados = DB::table('usuario as u')
             ->join('personal as p', 'p.Codigo', '=', 'u.CodigoPersonal')
-            ->select('p.Nombres', 'p.ApellidoPaterno', 'p.ApellidoMaterno', 'p.Codigo')
+            ->select('p.Nombres', 'p.ApellidoPaterno', 'p.ApellidoMaterno', 'u.Codigo')
             ->where('u.CodigoLocal', '=', $request->get('local'))
             ->where('u.CodigoPerfil', '!=', 1)
             ->get();
@@ -86,5 +87,48 @@ class PermisoUsuarioController extends Controller
         }
 
         return response()->json($respuesta, 200);
+    }
+
+    public function registrarPermisos(Request $request)
+    {
+        $opcion = $request->get('opcion');
+        $usuario = $request->get('usuario');
+        // ? BUSCAR OPCIONES DEL USUARIO
+        $opcionEmpleado = DB::table('permisousuario as pu')
+            ->select('pu.Permitido', 'pu.CodigoOpcion','pu.Codigo')
+            ->where('pu.CodigoUsuario', '=', $usuario)
+            ->get();
+        // ? CAMBIAR ESTADO
+        foreach ($opcionEmpleado as $opE) {
+            $valor = true;
+            foreach ($opcion as $op) {
+                if ($op == $opE->CodigoOpcion) {
+                    $valor = false;
+                }
+            }
+            if (sizeof($opcion) != 0) {
+                if ($valor) {
+                    $permisousuario = PermisoUsuario::findOrFail($opE->codigo);
+                    $permisousuario ->Permitido = 0;
+                    $permisousuario ->save();
+                }
+            }
+        }
+        // ? AGREGAR OPCIONES
+        foreach ($opcion as $op) {
+            $valorN = true;
+            foreach ($opcionEmpleado as $opE) {
+                if ($opE->CodigoOpcion == $op) {
+                    $valorN = false;
+                }
+            }
+            if ($valorN) {
+                $permisousuario = new PermisoUsuario();
+                $permisousuario->CodigoUsuario = $usuario;
+                $permisousuario->CodigoOpcion = $op;
+                $permisousuario->save();
+            }
+        }
+        return response()->json($opcionEmpleado , 200);
     }
 }

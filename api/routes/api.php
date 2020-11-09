@@ -24,4 +24,5 @@ Route::post('login', [UsuarioController::class, 'login']);
 Route::post('usuarios', [UsuarioController::class, 'lista'])->middleware('token');
 Route::post('listaLocales', [PermisoUsuarioController::class, 'ListarLocal'])->middleware('token');
 Route::post('listaEmpleados', [PermisoUsuarioController::class, 'ListarEmpleados'])->middleware('token');
-Route::post('listaOpcionesEmpleados',[PermisoUsuarioController::class,'ListarOpcionesEmpleado'])->middleware('token');
+Route::post('listaOpcionesEmpleados', [PermisoUsuarioController::class, 'ListarOpcionesEmpleado'])->middleware('token');
+Route::post('registrarOpcion', [PermisoUsuarioController::class, 'registrarPermisos'])->middleware('token');

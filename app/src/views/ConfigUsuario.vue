@@ -3,12 +3,12 @@
     <v-row align="center" justify-center class="text-center pl-10 pr-10">
       <v-col cols="12" align="center" justify-center class="text-center">
         <v-card>
-          <v-card-title class="headline indigo lighten-4 pa-2">
+          <v-card-title class="headline indigo lighten-4 pa-2 white--text">
             <h6 class="pl-3">Gestionar permisos usuarios</h6>
           </v-card-title>
           <v-card-text>
             <v-container class="pt-3">
-              <v-subheader>Empleados</v-subheader>
+              <v-subheader>Empleado</v-subheader>
               <v-form ref="form" v-model="valid" lazy-validation>
                 <v-row class="justify-center">
                   <v-col cols="2">
@@ -46,8 +46,28 @@
               <v-divider></v-divider>
               <v-subheader>Permisos por usuarios</v-subheader>
               <v-col cols="4" class="text-left">
-                <v-treeview selectable :items="opciones" selected-color="indigo darken-4"></v-treeview>
+                <v-treeview
+                  v-model="opcion"
+                  selectable
+                  :items="opciones"
+                  selected-color="indigo darken-4"
+                  @input="cambiarEdit"
+                ></v-treeview>
               </v-col>
+              <v-row>
+                <v-divider></v-divider>
+                <v-col cols="12">
+                  <v-btn
+                    color="indigo darken-4 white--text"
+                    elevation="5"
+                    :disabled="edit"
+                    @click="guardarOpcionesEmpleado"
+                  >
+                    <v-icon left dark>mdi-plus</v-icon>
+                    Guardar
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-container>
           </v-card-text>
         </v-card>
@@ -65,8 +85,10 @@ export default {
     locales: [],
     empleados: [],
     opciones: [],
+    opcion: [],
     empleado: null,
     valid: true,
+    edit: true,
     fieldRules: {
       required: (v) => !!v || "Campo requerido",
     },
@@ -106,6 +128,21 @@ export default {
     cargarOpciones() {
       post("listaOpcionesEmpleados", this.assembleEmpleado()).then((data) => {
         this.opciones = data;
+      });
+    },
+    cambiarEdit() {
+      this.edit = false;
+    },
+    assembleRegistrar() {
+        console.log(this.empleado);
+      return {
+        usuario: this.empleado,
+        opcion: this.opcion,
+      };
+    },
+    guardarOpcionesEmpleado() {
+      post("registrarOpcion", this.assembleRegistrar()).then(() => {
+        this.cargarOpciones();
       });
     },
   },
