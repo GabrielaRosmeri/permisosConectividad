@@ -56,6 +56,7 @@ class PermisoUsuarioController extends Controller
             return array_values($resultado);
         }
         $respuesta = [];
+        $active = [];
         $opciones = DB::table('sistema as s')
             ->join('opcion as o', 'o.CodigoSistema', '=', 's.Codigo')
             ->select('s.Codigo as sistema', 's.Nombre as sistemaNombre', 's.icono as icono', 'o.Nombre', 'o.Codigo')
@@ -74,19 +75,23 @@ class PermisoUsuarioController extends Controller
 
         foreach ($opciones as $op) {
             $children = [];
+            $valor = false;
             foreach ($op->opciones as $opO) {
-                $valor = false;
                 foreach ($personalOpciones as $po) {
-                    if ($opO["codigo"] == $po->Codigo) {
+                    if ($po->Codigo == $opO["codigo"]) {
                         $valor = true;
                     }
                 }
-                array_push($children, array("id" => $opO["codigo"], "name" => $opO["opcion"], "activatable" => $valor));
+                if ($valor == true) {
+                    array_push($active, $opO["codigo"]);
+                }
+                array_push($children, array("id" => $opO["codigo"], "name" => $opO["opcion"]));
+                $valor = false;
             }
             array_push($respuesta, array("id" => $op->sistemaNombre, "name" => $op->sistemaNombre, "children" => $children));
         }
 
-        return response()->json($respuesta, 200);
+        return response()->json(array("opcion" => $respuesta, "active" => $active), 200);
     }
 
     public function registrarPermisos(Request $request)
@@ -95,7 +100,7 @@ class PermisoUsuarioController extends Controller
         $usuario = $request->get('usuario');
         // ? BUSCAR OPCIONES DEL USUARIO
         $opcionEmpleado = DB::table('permisousuario as pu')
-            ->select('pu.Permitido', 'pu.CodigoOpcion','pu.Codigo')
+            ->select('pu.Permitido', 'pu.CodigoOpcion', 'pu.Codigo')
             ->where('pu.CodigoUsuario', '=', $usuario)
             ->get();
         // ? CAMBIAR ESTADO
@@ -109,8 +114,8 @@ class PermisoUsuarioController extends Controller
             if (sizeof($opcion) != 0) {
                 if ($valor) {
                     $permisousuario = PermisoUsuario::findOrFail($opE->codigo);
-                    $permisousuario ->Permitido = 0;
-                    $permisousuario ->save();
+                    $permisousuario->Permitido = 0;
+                    $permisousuario->save();
                 }
             }
         }
@@ -129,6 +134,6 @@ class PermisoUsuarioController extends Controller
                 $permisousuario->save();
             }
         }
-        return response()->json($opcionEmpleado , 200);
+        return response()->json($opcionEmpleado, 200);
     }
 }

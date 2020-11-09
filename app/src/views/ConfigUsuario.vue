@@ -47,7 +47,7 @@
               <v-subheader>Permisos por usuarios</v-subheader>
               <v-col cols="4" class="text-left">
                 <v-treeview
-                  v-model="opcion"
+                  v-model="active"
                   selectable
                   :items="opciones"
                   selected-color="indigo darken-4"
@@ -81,11 +81,13 @@ import { mapState } from "vuex";
 import { post } from "../api/api";
 export default {
   data: () => ({
+    selectionType: "leaf",
     local: null,
     locales: [],
     empleados: [],
     opciones: [],
     opcion: [],
+    active: [],
     empleado: null,
     valid: true,
     edit: true,
@@ -121,23 +123,25 @@ export default {
       });
     },
     assembleOpcion() {
+      console.log(this.empleado);
       return {
-        usuario: this.usuarioIds,
+        usuario: this.empleado,
       };
     },
     cargarOpciones() {
-      post("listaOpcionesEmpleados", this.assembleEmpleado()).then((data) => {
-        this.opciones = data;
+      post("listaOpcionesEmpleados", this.assembleOpcion()).then((data) => {
+        this.opciones = data.opcion;
+        this.active = data.active;
       });
     },
     cambiarEdit() {
       this.edit = false;
     },
     assembleRegistrar() {
-        console.log(this.empleado);
+      console.log(this.empleado);
       return {
         usuario: this.empleado,
-        opcion: this.opcion,
+        opcion: this.active,
       };
     },
     guardarOpcionesEmpleado() {
