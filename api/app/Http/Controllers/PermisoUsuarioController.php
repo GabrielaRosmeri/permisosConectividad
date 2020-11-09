@@ -71,6 +71,7 @@ class PermisoUsuarioController extends Controller
             ->join('opcion as o', 'o.Codigo', '=', 'pu.CodigoOpcion')
             ->select('o.Codigo', 'o.Nombre')
             ->where('u.Codigo', '=', $request->get('usuario'))
+            ->where('pu.Permitido', '=', 1)
             ->get();
 
         foreach ($opciones as $op) {
@@ -113,8 +114,12 @@ class PermisoUsuarioController extends Controller
             }
             if (sizeof($opcion) != 0) {
                 if ($valor) {
-                    $permisousuario = PermisoUsuario::findOrFail($opE->codigo);
+                    $permisousuario = PermisoUsuario::findOrFail($opE->Codigo);
                     $permisousuario->Permitido = 0;
+                    $permisousuario->save();
+                }else{
+                    $permisousuario = PermisoUsuario::findOrFail($opE->Codigo);
+                    $permisousuario->Permitido = 1;
                     $permisousuario->save();
                 }
             }
