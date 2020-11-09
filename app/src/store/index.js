@@ -12,7 +12,6 @@ export default new Vuex.Store({
   },
   mutations: {
     updateUser(state) {
-      console.log(getUser());
       state.user = getUser();
       if (state.user != null) {
         state.admin = state.user.perfil === 1 ? true : false;

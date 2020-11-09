@@ -73,7 +73,7 @@ class UsuarioController extends Controller
                     "logo" => $empresa->Logo,
                     "empresa" => $empresa->RazonSocial,
                     "empresaId" => $empresa->Codigo,
-                    "opciones" => $opciones,
+                    "modulos" => $opciones,
                     "usuarioId" => $usuario->Codigo,
                     "token" => $token->get()
                 ), 200);

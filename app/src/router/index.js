@@ -70,9 +70,26 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   let user = getUser();
+  let sw = true;
   if (to.meta.auth && !user) {
     next("/login");
-  } else next();
+  } else if(to.meta.auth && user){
+    if (to.path == "/" ) {
+      next();
+      sw = false;
+    } 
+
+    user.modulos.forEach(modulo =>{
+      modulo.opciones.forEach(opcion=>{
+        if(opcion.url == to.path){
+          next();
+          sw = false
+        } 
+
+      })
+    })
+   if(sw) next('/');
+  }else next()
 });
 
 export default router

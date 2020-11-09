@@ -24,8 +24,8 @@
             <v-row justify-center>
               <v-col cols="12" sm="12">
                 <v-list-item>
-                  <v-list-item-avatar>
-                    <v-img :src="user ? user.logo : getImgUrl()"></v-img>
+                  <v-list-item-avatar v-if="user">
+                    <v-img :src="user.logo ? user.logo : getImgUrl()"></v-img>
                   </v-list-item-avatar>
                 </v-list-item>
                 <v-list-item-title class="title">
@@ -39,7 +39,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list v-for="(sistema, i) in itemContent" :key="i">
+        <v-list v-for="(sistema, i) in user?user.modulos:[]" :key="i">
           <v-list-group :prepend-icon="sistema.icono" no-action>
             <template v-slot:activator>
               <v-list-item-content>
@@ -80,7 +80,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { removeUser, getUser} from "./api/api";
+import { removeUser} from "./api/api";
 import store from "./store/index";
 export default {
   name: "App",
@@ -105,11 +105,8 @@ export default {
     ...mapState(["admin"]),
   },
   created() {
-    getUser();
     store.commit("updateUser");
-    if (this.user != null) {
-      this.itemContent = this.user.opciones;
-    }
+   
   },
 };
 </script>
