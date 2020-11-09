@@ -74,6 +74,7 @@ class UsuarioController extends Controller
                     "empresa" => $empresa->RazonSocial,
                     "empresaId" => $empresa->Codigo,
                     "opciones" => $opciones,
+                    "usuarioId" => $usuario->Codigo,
                     "token" => $token->get()
                 ), 200);
             } else {

@@ -37,4 +37,54 @@ class PermisoUsuarioController extends Controller
 
         return response()->json($respuesta, 200);
     }
+
+    public function ListarOpcionesEmpleado(Request $request)
+    {
+        function agruparSistema($array)
+        {
+            $resultado = array();
+            foreach ($array as $sistema) {;
+                if (!isset($resultado[$sistema->sistema])) {
+                    $resultado[$sistema->sistema] = $sistema;
+                }
+                if (!isset($resultado[$sistema->sistema]->opciones)) {
+                    $resultado[$sistema->sistema]->opciones = array();
+                }
+                array_push($resultado[$sistema->sistema]->opciones, array("opcion" => $sistema->Nombre, "codigo" => $sistema->Codigo));
+            }
+            return array_values($resultado);
+        }
+        $respuesta = [];
+        $opciones = DB::table('sistema as s')
+            ->join('opcion as o', 'o.CodigoSistema', '=', 's.Codigo')
+            ->select('s.Codigo as sistema', 's.Nombre as sistemaNombre', 's.icono as icono', 'o.Nombre', 'o.Codigo')
+            ->where('o.Vigencia', '=', 1)
+            ->where('o.CodigoSistema', '!=', 1)
+            ->where('o.CodigoSistema', '!=', 6)
+            ->get();
+        $opciones = agruparSistema($opciones);
+
+        $personalOpciones = DB::table('usuario as u')
+            ->join('permisousuario as pu', 'pu.CodigoUsuario', '=', 'u.Codigo')
+            ->join('opcion as o', 'o.Codigo', '=', 'pu.CodigoOpcion')
+            ->select('o.Codigo', 'o.Nombre')
+            ->where('u.Codigo', '=', $request->get('usuario'))
+            ->get();
+
+        foreach ($opciones as $op) {
+            $children = [];
+            foreach ($op->opciones as $opO) {
+                $valor = false;
+                foreach ($personalOpciones as $po) {
+                    if ($opO["codigo"] == $po->Codigo) {
+                        $valor = true;
+                    }
+                }
+                array_push($children, array("id" => $opO["codigo"], "name" => $opO["opcion"], "activatable" => $valor));
+            }
+            array_push($respuesta, array("id" => $op->sistema, "name" => $op->sistemaNombre, "children" => $children));
+        }
+
+        return response()->json($respuesta, 200);
+    }
 }
