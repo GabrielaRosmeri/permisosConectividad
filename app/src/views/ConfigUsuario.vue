@@ -36,6 +36,7 @@
                       color="indigo darken-4"
                       class="pt-8"
                       @mousedown="validate"
+                      @click="cargarOpciones"
                     >
                       <v-icon>mdi-magnify</v-icon>
                     </v-btn>
@@ -44,7 +45,9 @@
               </v-form>
               <v-divider></v-divider>
               <v-subheader>Permisos por usuarios</v-subheader>
-              <v-treeview selectable></v-treeview>
+              <v-col cols="4" class="text-left">
+                <v-treeview selectable :items="opciones"></v-treeview>
+              </v-col>
             </v-container>
           </v-card-text>
         </v-card>
@@ -61,6 +64,7 @@ export default {
     local: null,
     locales: [],
     empleados: [],
+    opciones: [],
     empleado: null,
     valid: true,
     fieldRules: {
@@ -89,15 +93,26 @@ export default {
         local: this.local,
       };
     },
-    busquedaEmpleado(){
-        post("listaEmpleados", this.assembleEmpleado()).then((data) => {
+    busquedaEmpleado() {
+      post("listaEmpleados", this.assembleEmpleado()).then((data) => {
         this.empleados = data;
       });
-    }
+    },
+    assembleOpcion() {
+      return {
+        usuario: this.usuarioIds,
+      };
+    },
+    cargarOpciones() {
+      post("listaOpcionesEmpleados", this.assembleEmpleado()).then((data) => {
+        this.opciones = data;
+      });
+    },
   },
   created() {
     this.empresa = this.user.empresaId;
     this.listaLocales();
+    this.usuarioIds = this.user.usuarioId;
   },
 };
 </script>

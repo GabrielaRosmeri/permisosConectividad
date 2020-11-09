@@ -82,7 +82,7 @@ class PermisoUsuarioController extends Controller
                 }
                 array_push($children, array("id" => $opO["codigo"], "name" => $opO["opcion"], "activatable" => $valor));
             }
-            array_push($respuesta, array("id" => $op->sistema, "name" => $op->sistemaNombre, "children" => $children));
+            array_push($respuesta, array("id" => $op->sistemaNombre, "name" => $op->sistemaNombre, "children" => $children));
         }
 
         return response()->json($respuesta, 200);
