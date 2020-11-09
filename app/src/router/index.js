@@ -43,6 +43,146 @@ const routes = [
     },
   },
   {
+    path: "/local",
+    name: "Local",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/cotizacion",
+    name: "Cotizacion",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/factura",
+    name: "Factura",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/devolucion",
+    name: "Devolucion",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/listaPrecios",
+    name: "Lista Precios",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/administracionArticulos",
+    name: "Administracion de articulos",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/precios",
+    name: "Precios",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/depositos",
+    name: "Depositos",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/depositos",
+    name: "Depositos",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/pagosDiferidos",
+    name: "Pagos Diferidos",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/creditos",
+    name: "Creditos",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/ordenCompra",
+    name: "Orden de Compra",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/devolucionCompra",
+    name: "Devolucion de Compra",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
+    path: "/facturaCompra",
+    name: "Factura de Compra",
+    component: () => import("../views/Local.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
     path: "/configuracionPerfil",
     name: "ConfigPerfil",
     component: () => import("../views/ConfigPerfil.vue"),
@@ -73,23 +213,23 @@ router.beforeEach((to, from, next) => {
   let sw = true;
   if (to.meta.auth && !user) {
     next("/login");
-  } else if(to.meta.auth && user){
-    if (to.path == "/" ) {
+  } else if (to.meta.auth && user) {
+    if (to.path == "/") {
       next();
       sw = false;
-    } 
+    }
 
-    user.modulos.forEach(modulo =>{
-      modulo.opciones.forEach(opcion=>{
-        if(opcion.url == to.path){
+    user.modulos.forEach(modulo => {
+      modulo.opciones.forEach(opcion => {
+        if (opcion.url == to.path) {
           next();
           sw = false
-        } 
+        }
 
       })
     })
-   if(sw) next('/');
-  }else next()
+    if (sw) next('/');
+  } else next()
 });
 
 export default router
