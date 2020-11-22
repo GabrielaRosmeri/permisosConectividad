@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="background-color: #fafafa">
     <v-app-bar app color="indigo darken-4" dark>
       <v-app-bar-nav-icon
         @click="drawer = true"
@@ -39,7 +39,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list v-for="(sistema, i) in user?user.modulos:[]" :key="i">
+        <v-list v-for="(sistema, i) in user ? user.modulos : []" :key="i">
           <v-list-group :prepend-icon="sistema.icono" no-action>
             <template v-slot:activator>
               <v-list-item-content>
@@ -80,7 +80,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { removeUser} from "./api/api";
+import { removeUser } from "./api/api";
 import store from "./store/index";
 export default {
   name: "App",
@@ -89,7 +89,7 @@ export default {
 
   data: () => ({
     drawer: true,
-    itemContent : []
+    itemContent: [],
   }),
   methods: {
     cerrarSession() {
@@ -106,7 +106,6 @@ export default {
   },
   created() {
     store.commit("updateUser");
-   
   },
 };
 </script>

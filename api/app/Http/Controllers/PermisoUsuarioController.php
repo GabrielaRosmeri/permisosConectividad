@@ -57,23 +57,22 @@ class PermisoUsuarioController extends Controller
         }
         $respuesta = [];
         $active = [];
-        $opciones = DB::table('sistema as s')
-            ->join('opcion as o', 'o.CodigoSistema', '=', 's.Codigo')
+        $noAsignado = [];
+        $opciones = DB::table('permisousuario as pu')
+            ->join('opcion as o', 'o.Codigo', '=', 'pu.CodigoOpcion')
+            ->join('sistema as s', 's.Codigo', '=', 'o.CodigoSistema')
             ->select('s.Codigo as sistema', 's.Nombre as sistemaNombre', 's.icono as icono', 'o.Nombre', 'o.Codigo')
             ->where('o.Vigencia', '=', 1)
-            ->where('o.CodigoSistema', '!=', 1)
-            ->where('o.CodigoSistema', '!=', 6)
+            ->where('pu.CodigoUsuario', '=', $request->get('usuario'))
             ->get();
         $opciones = agruparSistema($opciones);
 
-        $personalOpciones = DB::table('usuario as u')
-            ->join('permisousuario as pu', 'pu.CodigoUsuario', '=', 'u.Codigo')
+        $personalOpciones = DB::table('permisousuario as pu')
             ->join('opcion as o', 'o.Codigo', '=', 'pu.CodigoOpcion')
             ->select('o.Codigo', 'o.Nombre')
-            ->where('u.Codigo', '=', $request->get('usuario'))
+            ->where('pu.CodigoUsuario', '=', $request->get('usuario'))
             ->where('pu.Permitido', '=', 1)
             ->get();
-
         foreach ($opciones as $op) {
             $children = [];
             $valor = false;
@@ -92,7 +91,46 @@ class PermisoUsuarioController extends Controller
             array_push($respuesta, array("id" => $op->sistemaNombre, "name" => $op->sistemaNombre, "children" => $children));
         }
 
-        return response()->json(array("opcion" => $respuesta, "active" => $active), 200);
+        //? Permisos no asignados
+        // DB::enableQueryLog();
+        $opcionesNot = DB::table('permisousuario as pu')
+            ->join('opcion as o', 'o.Codigo', '=', 'pu.CodigoOpcion')
+            ->join('sistema as s', 's.Codigo', '=', 'o.CodigoSistema')
+            ->select('s.Codigo as sistema', 's.Nombre as sistemaNombre', 's.icono as icono', 'o.Nombre', 'o.Codigo')
+            ->where('pu.CodigoUsuario', '=', $request->get('usuario'))
+            ->where('o.Vigencia', '=', 1)
+            ->get();
+        $opcionesNot = agruparSistema($opcionesNot);
+        $sistemaOp = DB::table('opcion as o')
+            ->join('sistema as s', 's.Codigo', '=', 'o.Codigosistema')
+            ->select('s.Codigo as sistema', 's.Nombre as sistemaNombre', 's.icono as icono', 'o.Nombre', 'o.Codigo')
+            ->where('o.Vigencia', '=', 1)
+            ->get();
+
+        $sistemaOp = agruparSistema($sistemaOp);
+        // dd(DB::getQueryLog());
+        // dd($opciones, $opcionesNot);
+        foreach ($sistemaOp as $sOp) {
+            $children = [];
+            foreach ($sOp->opciones as $opS) {
+                $valor = true;
+                foreach ($opcionesNot as $notS) {
+                    foreach ($notS->opciones as $nOp) {
+                        if ($opS["codigo"] == $nOp["codigo"]) {
+                            $valor = false;
+                        }
+                    }
+                }
+                if ($valor) {
+                    array_push($children, array("id" => $opS["codigo"], "name" => $opS["opcion"]));
+                }
+            }
+            if (sizeof($children) != 0) {
+                array_push($noAsignado, array("id" => $sOp->sistemaNombre, "name" => $sOp->sistemaNombre, "children" => $children));
+            }
+        }
+
+        return response()->json(array("opcion" => $respuesta, "active" => $active, "noOption" => $noAsignado), 200);
     }
 
     public function registrarPermisos(Request $request)
@@ -117,7 +155,7 @@ class PermisoUsuarioController extends Controller
                     $permisousuario = PermisoUsuario::findOrFail($opE->Codigo);
                     $permisousuario->Permitido = 0;
                     $permisousuario->save();
-                }else{
+                } else {
                     $permisousuario = PermisoUsuario::findOrFail($opE->Codigo);
                     $permisousuario->Permitido = 1;
                     $permisousuario->save();

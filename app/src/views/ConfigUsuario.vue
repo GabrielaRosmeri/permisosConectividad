@@ -3,7 +3,10 @@
     <v-row align="center" justify-center class="text-center pl-10 pr-10">
       <v-col cols="12" align="center" justify-center class="text-center">
         <v-card>
-          <v-card-title class="headline pa-2 white--text" style="background-color:#b5ccf1">
+          <v-card-title
+            class="headline pa-2 white--text"
+            style="background-color: #b5ccf1"
+          >
             <h6 class="pl-3">Gestionar permisos usuarios</h6>
           </v-card-title>
           <v-card-text>
@@ -43,9 +46,23 @@
                   </v-col>
                 </v-row>
               </v-form>
-              <v-divider></v-divider>
-              <v-subheader>Permisos por usuarios</v-subheader>
-              <v-col cols="4" class="text-left">
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row class="pt-2 pl-12 pr-12">
+      <v-col cols="6">
+        <v-card>
+          <v-card-title
+            class="headline pa-2 white--text"
+            style="background-color: #b5ccf1"
+          >
+            <h6 class="pl-3">Permisos asignados</h6>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-col cols="12" class="text-left">
                 <v-treeview
                   v-model="active"
                   selectable
@@ -54,23 +71,46 @@
                   @input="cambiarEdit"
                 ></v-treeview>
               </v-col>
-              <v-row>
-                <v-divider></v-divider>
-                <v-col cols="12">
-                  <v-btn
-                    color="indigo darken-4 white--text"
-                    elevation="5"
-                    :disabled="edit"
-                    @click="guardarOpcionesEmpleado"
-                  >
-                    <v-icon left dark>mdi-plus</v-icon>
-                    Guardar
-                  </v-btn>
-                </v-col>
-              </v-row>
             </v-container>
           </v-card-text>
         </v-card>
+      </v-col>
+      <v-col cols="6">
+        <v-card>
+          <v-card-title
+            class="headline pa-2 white--text"
+            style="background-color: #b5ccf1"
+          >
+            <h6 class="pl-3">Permisos no asignados</h6>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-col cols="12" class="text-left">
+                <v-treeview
+                  v-model="noAsignados"
+                  selectable
+                  :items="opcionesNoAsignados"
+                  selected-color="indigo darken-4"
+                  @input="cambiarEdit"
+                ></v-treeview>
+              </v-col>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row align="center" justify-center class="text-center">
+      <v-divider></v-divider>
+      <v-col cols="12">
+        <v-btn
+          color="indigo darken-4 white--text"
+          elevation="5"
+          :disabled="edit"
+          @click="guardarOpcionesEmpleado"
+        >
+          <v-icon left dark>mdi-plus</v-icon>
+          Guardar
+        </v-btn>
       </v-col>
     </v-row>
   </v-content>
@@ -89,6 +129,8 @@ export default {
     opciones: [],
     opcion: [],
     active: [],
+    noAsignados: [],
+    opcionesNoAsignados: [],
     empleado: null,
     valid: true,
     edit: true,
@@ -124,7 +166,6 @@ export default {
       });
     },
     assembleOpcion() {
-      console.log(this.empleado);
       return {
         usuario: this.empleado,
       };
@@ -133,6 +174,7 @@ export default {
       post("listaOpcionesEmpleados", this.assembleOpcion()).then((data) => {
         this.opciones = data.opcion;
         this.active = data.active;
+        this.opcionesNoAsignados = data.noOption;
       });
     },
     cambiarEdit() {
