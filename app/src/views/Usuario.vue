@@ -224,6 +224,7 @@
                   :rules="[fieldRules.validarClave]"
                   :error-messages="errors"
                   label="Clave actual"
+                  placeholder="Ingresar clave actual"
                   maxlength="10"
                   prepend-icon="mdi-domain"
                   @mouseup="limpiarError()"
@@ -237,6 +238,7 @@
                   v-model="ClaveNueva"
                   :rules="[fieldRules.validarClave]"
                   label="Clave nueva"
+                  placeholder="Ingresar nueva clave"
                   maxlength="10"
                   prepend-icon="mdi-domain"
                   @click:append="show1 = !show1"
@@ -272,7 +274,8 @@
 
 <script>
 import { mapState } from "vuex";
-import { post, get } from "../api/api";
+import { post, get, put } from "../api/api";
+import Swal from "sweetalert2";
 export default {
   data: () => ({
     todosU: false,
@@ -328,6 +331,7 @@ export default {
     ConfirmarClave: "",
     ComprobarClave: "",
     ClaveNueva: "",
+    errors: [],
   }),
   computed: {
     ...mapState(["user"]),
@@ -361,6 +365,9 @@ export default {
       this.ComprobarClave = "";
       this.$refs.form.resetValidation();
     },
+    limpiarError() {
+      this.errors = [];
+    },
     confirmarClave(value) {
       if (value === this.Clave) {
         this.confirmar = true;
@@ -370,6 +377,14 @@ export default {
         return "Clave no coincide.";
       }
     },
+    comprobarClave() {
+      console.log(this.comprobar);
+      if (this.comprobar === false) {
+        return "Clave no coincide.";
+      } else {
+        return true;
+      }
+    },
     executeEventClick() {
       if (this.edit === false) {
         this.registerUsuario();
@@ -377,26 +392,17 @@ export default {
         this.editUsuario();
       }
     },
-    changeUsuario() {
-      if (this.todosU === true) {
-        this.estadoU = [1, 0];
-      } else {
-        this.estadoU = [1];
-      }
-      this.busquedaUsuario();
-    },
     assembleUser() {
       return {
         atributo: this.atributo,
         busqueda: this.busqueda,
         empresa: this.empresa,
-        vigencia: this.estadoU,
       };
     },
     busquedaUsuario() {
       if (this.valid == false) return;
       this.loading = true;
-      post("usuarios", this.assembleUser()).then((data) => {
+      post("usuariosLista", this.assembleUser()).then((data) => {
         console.log(data.length);
         if (data.length === 0) {
           this.disabled = true;
@@ -426,6 +432,83 @@ export default {
       post("usuarioslocal", this.assembleLocal()).then((data) => {
         this.itemsLocal = data;
       });
+    },
+    showEditUsuario(usuario) {
+      this.edit = true;
+      this.editId = usuario.Codigo;
+      this.limpiarError();
+      this.mostrarUsuario(usuario.Codigo).then(() => {
+        this.dialogEjemplo = true;
+        this.mostrarPerfil();
+        this.mostrarPersonal();
+        this.mostrarLocal();
+      });
+    },
+    assembleRegistrar() {
+      return {
+        CodigoPersonal: this.CodigoPersonal,
+        CodigoPerfil: this.CodigoPerfil,
+        Nombre: this.Nombre,
+        Clave: this.Clave,
+        CodigoLocal: this.CodigoLocal,
+      };
+    },
+    registerUsuario() {
+      if (this.validD == false) return;
+      if (this.confirmar == false) return;
+      this.saveLoading = true;
+      post("usuarios", this.assembleRegistrar()).then(() => {
+        this.saveLoading = false;
+        this.dialogEjemplo = false;
+        this.limpiar();
+        Swal.fire({
+          title: "Sistema",
+          text: "Usuario registrado correctamente.",
+          icon: "success",
+          confirmButtonText: "OK",
+          timer: 2500,
+        });
+        this.actualizarUsuarios();
+      });
+    },
+    assembleEdit() {
+      return {
+        Nombre: this.Nombre,
+        ComprobarClave: this.ComprobarClave,
+        Clave: this.ClaveNueva, // y la antigua? ay
+      };
+    },
+    editUsuario() {
+      if (this.valid == false) return;
+      this.saveLoading = true;
+      put("usuarios/" + this.editId, this.assembleEdit())
+        .then(() => {
+          this.limpiar();
+          this.comprobar = true;
+          this.saveLoading = false;
+          this.editId = null;
+          this.dialogEjemplo = false;
+          Swal.fire({
+            title: "Sistema",
+            text: "Usuario actualizado correctamente.",
+            icon: "success",
+            confirmButtonText: "OK",
+            timer: 2500,
+          });
+          this.$refs.usuarioTable.fetchData();
+        })
+        .catch(() => {
+          this.errors = ["Contrase;a no valida"];
+          this.saveLoading = false;
+        });
+    },
+    async mostrarUsuario(codigo) {
+      const usuario = await get("usuarios/" + codigo);
+      this.CodigoPersonal = usuario.CodigoPersonal;
+      this.CodigoPerfil = usuario.CodigoPerfil;
+      this.Nombre = usuario.Nombre;
+      this.Clave = usuario.Clave;
+      this.CodigoLocal = usuario.CodigoLocal;
     },
   },
   created() {

@@ -98,7 +98,6 @@ class UsuarioController extends Controller
             ->where('pf.Codigo', '=', 2)
             ->where('e.Codigo', '=', $request->get('empresa'))
             ->Where($atributo, 'like', "%{$busqueda}%")
-            ->whereIn('u.Vigencia', $request->get('vigencia'))
             ->get();
 
         return response()->json($usuario, 200);
@@ -140,5 +139,73 @@ class UsuarioController extends Controller
             array_push($respuesta, array("value" => $l->Codigo, "text" => $l->Nombre));
         }
         return response()->json($respuesta, 200);
+    }
+
+    public function leer($id)
+    {
+        return Usuario::find($id);
+    }
+
+    public function registrar(Request $request)
+    {
+        $validacion = Validator::make($request->all(), [
+            'CodigoPersonal' => 'required',
+            'CodigoPerfil' => 'required',
+            'Nombre' => 'required|max:100',
+            'Clave' => 'required|max:255',
+            'CodigoLocal' => 'required'
+        ], [
+            'required' => ':attribute es obligatorio',
+            'max' => ':attribute llego al limite de letras'
+        ]);
+
+        if ($validacion->fails()) {
+            return response()->json($validacion->errors()->first(), 400);
+        }
+
+        $usuario = new Usuario();
+        $usuario->CodigoPersonal = $request->get('CodigoPersonal');
+        $usuario->CodigoPerfil = $request->get('CodigoPerfil');
+        $usuario->Nombre = $request->get('Nombre');
+        $usuario->Clave = Hash::make($request->get('Clave'));
+        $usuario->CodigoLocal = $request->get('CodigoLocal');
+        $usuario->save();
+
+        return response()->json($usuario, 201);
+    }
+
+    public function actualizar(Request $request, $id)
+    {
+        // luego lo pones
+        $clave = DB::table('usuario as u')
+            ->select('u.Clave')
+            ->where('u.Codigo', '=', $id)
+            ->get()
+            ->first();
+
+        if ($request->get('ComprobarClave') != '') {
+            $respuesta = Hash::check($request->get('ComprobarClave'), $clave->Clave);
+            if ($respuesta == false) {
+                return response()->json(array("msg" => "Contrase;a no coincide"), 501); //el msg de aqui no sirve por ahora 
+            }
+        }
+        $usuario = Usuario::findOrFail($id);
+        $usuario->Nombre = $request->get('Nombre');
+        if ($request->get('Clave') != '') {
+            $usuario->Clave = Hash::make($request->get('Clave'));
+        }
+        $usuario->save();
+
+        return response()->json($usuario, 200);
+    }
+
+
+    public function cambiarVigencia($id)
+    {
+        $usuario = Usuario::findOrFail($id);
+        $usuario->Vigencia = !$usuario->Vigencia;
+        $usuario->save();
+
+        return response()->json($usuario, 200);
     }
 }

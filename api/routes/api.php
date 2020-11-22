@@ -31,7 +31,11 @@ Route::post('registrarOpcion', [PermisoUsuarioController::class, 'registrarPermi
 //* ************************************************************************************
 
 //* CRUD DE USUARIOS
-Route::post('usuarios', [UsuarioController::class, 'lista'])->middleware('token');
+Route::post('usuariosLista', [UsuarioController::class, 'lista'])->middleware('token');
 Route::get('usuariosperfil', [UsuarioController::class, 'listarPorPerfil'])->middleware('token');
 Route::get('usuariospersonal', [UsuarioController::class, @'listarPorPersonal'])->middleware('token');
 Route::post('usuarioslocal', [UsuarioController::class, 'listarPorLocal'])->middleware('token');
+Route::get('usuarios/{id}', [UsuarioController::class, 'leer'])->middleware('token');
+Route::post('usuarios', [UsuarioController::class, 'registrar'])->middleware('token');
+Route::put('usuarios/{id}', [UsuarioController::class, 'actualizar'])->middleware('token');
+Route::patch('usuario/{id}', [UsuarioController::class, 'cambiarVigencia'])->middleware('token');
