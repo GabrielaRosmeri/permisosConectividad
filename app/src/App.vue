@@ -1,6 +1,6 @@
 <template>
   <v-app style="background-color: #fafafa">
-    <v-app-bar app color="indigo darken-4" dark>
+    <v-app-bar app color="indigo darken-4" dark v-if="$route.name != 'Login'">
       <v-app-bar-nav-icon
         @click="drawer = true"
         v-if="$route.name != 'Login'"

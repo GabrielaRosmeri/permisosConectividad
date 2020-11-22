@@ -1,55 +1,78 @@
 <template>
   <v-content>
     <v-container fill-height grid-list-lg>
-      <v-layout align-center justify-center>
-        <v-flex xs12 sm4 md5 xl4>
+      <v-layout align-center justify-center style="padding: 100px">
+        <v-flex xs12>
           <v-form ref="form" v-model="valid" @submit.prevent="login">
             <v-layout row wrap>
               <v-flex xs12>
-                <v-card outlined>
-                  <v-card-text>
-                    <v-text-field
-                      v-model="usuario"
-                      prepend-icon="mdi-account"
-                      label="Usuario"
-                      placeholder="Nombre de usuario"
-                      type="text"
-                      :rules="[fieldRules.required]"
-                      @click="limpiarValidate"
-                    />
-                    <v-text-field
-                      v-model="clave"
-                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                      :type="show1 ? 'text' : 'password'"
-                      prepend-icon="mdi-lock"
-                      label="Contraseña"
-                      placeholder="Contraseña"
-                      :rules="[fieldRules.required]"
-                      @click="limpiarValidate"
-                      @click:append="show1 = !show1"
-                    />
-                  </v-card-text>
-                  <v-layout align-center justify-center>
-                    <v-flex xs12 sm6 md4 xl4>
-                      <v-btn
-                        xs6
-                        type="submit"
-                        rounded
-                        color="#292664"
-                        class="white--text"
-                        @mousedown="validate"
+                <v-card
+                  style="border-top: 5px solid #1a237e !important"
+                  elevation="6"
+                >
+                  <v-card-text class="pl-0 pr-0 pt-0 pb-0">
+                    <v-row>
+                      <v-col cols="6">
+                        <v-img
+                          class="white--text"
+                          height="500px"
+                          :src="getImgUrl()"
+                        >
+                        </v-img>
+                      </v-col>
+                      <v-divider vertical></v-divider>
+                      <v-col
+                        class="text-center pl-10"
+                        cols="5"
+                        align-center
+                        justify-center
+                        style="padding-top:20vh !important"
                       >
-                        <span v-if="!ingresando">Ingresar</span>
-                        <v-progress-circular
-                          v-else
-                          size="20"
-                          width="2"
-                          indeterminate
-                          color="#FFF"
-                        ></v-progress-circular>
-                      </v-btn>
-                    </v-flex>
-                  </v-layout>
+                        <v-text-field
+                          outlined
+                          v-model="usuario"
+                          append-icon="mdi-account"
+                          label="Usuario"
+                          placeholder="Nombre de usuario"
+                          type="text"
+                          :rules="[fieldRules.required]"
+                          @click="limpiarValidate"
+                        />
+                        <v-text-field
+                          outlined
+                          v-model="clave"
+                          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                          :type="show1 ? 'text' : 'password'"
+                          label="Contraseña"
+                          placeholder="Contraseña"
+                          :rules="[fieldRules.required]"
+                          @click="limpiarValidate"
+                          @click:append="show1 = !show1"
+                        />
+                        <v-layout align-center justify-center>
+                          <v-flex xs12 sm6 md4 xl4>
+                            <v-btn
+                              xs6
+                              type="submit"
+                              rounded
+                              color="#292664"
+                              class="white--text"
+                              @mousedown="validate"
+                            >
+                              <span v-if="!ingresando">Ingresar</span>
+                              <v-progress-circular
+                                v-else
+                                size="20"
+                                width="2"
+                                indeterminate
+                                color="#FFF"
+                              ></v-progress-circular>
+                            </v-btn>
+                          </v-flex>
+                        </v-layout>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
                 </v-card>
               </v-flex>
             </v-layout>
@@ -82,6 +105,9 @@ export default {
     },
     limpiarValidate() {
       this.$refs.form.resetValidation();
+    },
+    getImgUrl() {
+      return require("@/assets/bienvenida.png");
     },
     login() {
       console.log(this.valid);
