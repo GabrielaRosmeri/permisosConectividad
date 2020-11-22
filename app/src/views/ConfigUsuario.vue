@@ -82,7 +82,7 @@
                   @input="cambiarEdit"
                 >
                   <template v-slot:prepend="{ item }">
-                    <v-icon>
+                    <v-icon color="#607D8B" dense="true">
                       {{ item.file }}
                     </v-icon>
                   </template>
@@ -118,7 +118,7 @@
                   @input="cambiarEdit"
                 >
                   <template v-slot:prepend="{ item }">
-                    <v-icon>
+                    <v-icon color="#607D8B" dense="true">
                       {{ item.file }}
                     </v-icon>
                   </template>
