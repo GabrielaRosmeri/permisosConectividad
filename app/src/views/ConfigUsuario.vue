@@ -55,7 +55,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row class="pt-2 pl-12 pr-12">
+    <v-row class="pt-2 pl-12 pr-12" v-show="mostrar()">
       <v-col cols="6">
         <v-card>
           <v-card-title
@@ -65,7 +65,9 @@
               color: #1a237e !important;
             "
           >
-            <v-icon style="color: #1a237e !important">mdi-clipboard-check</v-icon>
+            <v-icon style="color: #1a237e !important"
+              >mdi-clipboard-check</v-icon
+            >
             <h6 class="pl-3">Permisos asignados</h6>
           </v-card-title>
           <v-divider></v-divider>
@@ -93,7 +95,9 @@
               color: #1a237e !important;
             "
           >
-            <v-icon style="color: #1a237e !important">mdi-clipboard-alert</v-icon>
+            <v-icon style="color: #1a237e !important"
+              >mdi-clipboard-alert</v-icon
+            >
             <h6 class="pl-3">Permisos no asignados</h6>
           </v-card-title>
           <v-divider></v-divider>
@@ -113,7 +117,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row align="center" justify-center class="text-center">
+    <v-row align="center" justify-center class="text-center" v-show="mostrar()">
       <v-divider></v-divider>
       <v-col cols="12">
         <v-btn
@@ -148,6 +152,7 @@ export default {
     empleado: null,
     valid: true,
     edit: true,
+    mostrarRow: false,
     fieldRules: {
       required: (v) => !!v || "Campo requerido",
     },
@@ -163,6 +168,10 @@ export default {
       return {
         empresa: this.empresa,
       };
+    },
+    mostrar() {
+      if (this.mostrarRow === true) return true;
+      else return false;
     },
     listaLocales() {
       post("listaLocales", this.assembleLocal()).then((data) => {
@@ -186,6 +195,7 @@ export default {
     },
     cargarOpciones() {
       post("listaOpcionesEmpleados", this.assembleOpcion()).then((data) => {
+        this.mostrarRow = true;
         this.opciones = data.opcion;
         this.active = data.active;
         this.opcionesNoAsignados = data.noOption;
