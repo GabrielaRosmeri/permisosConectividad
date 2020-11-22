@@ -4,14 +4,18 @@
       <v-col cols="12" align="center" justify-center class="text-center">
         <v-card>
           <v-card-title
-            class="headline pa-2 white--text"
-            style="background-color: #b5ccf1"
+            class="headline pa-2"
+            style="
+              border-left: 5px solid #1a237e !important;
+              color: #1a237e !important;
+            "
           >
-            <h6 class="pl-3">Gestionar permisos usuarios</h6>
+            <v-icon style="color: #1a237e !important">mdi-layers</v-icon>
+            <h6 class="pl-3">Gestionar permisos por usuario</h6>
           </v-card-title>
+          <v-divider></v-divider>
           <v-card-text>
             <v-container class="pt-3">
-              <v-subheader>Empleado</v-subheader>
               <v-form ref="form" v-model="valid" lazy-validation>
                 <v-row class="justify-center">
                   <v-col cols="2">
@@ -55,11 +59,16 @@
       <v-col cols="6">
         <v-card>
           <v-card-title
-            class="headline pa-2 white--text"
-            style="background-color: #b5ccf1"
+            class="headline pa-2"
+            style="
+              border-left: 5px solid #1a237e !important;
+              color: #1a237e !important;
+            "
           >
+            <v-icon style="color: #1a237e !important">mdi-clipboard-check</v-icon>
             <h6 class="pl-3">Permisos asignados</h6>
           </v-card-title>
+          <v-divider></v-divider>
           <v-card-text>
             <v-container>
               <v-col cols="12" class="text-left">
@@ -78,11 +87,16 @@
       <v-col cols="6">
         <v-card>
           <v-card-title
-            class="headline pa-2 white--text"
-            style="background-color: #b5ccf1"
+            class="headline pa-2"
+            style="
+              border-left: 5px solid #1a237e !important;
+              color: #1a237e !important;
+            "
           >
+            <v-icon style="color: #1a237e !important">mdi-clipboard-alert</v-icon>
             <h6 class="pl-3">Permisos no asignados</h6>
           </v-card-title>
+          <v-divider></v-divider>
           <v-card-text>
             <v-container>
               <v-col cols="12" class="text-left">
@@ -108,7 +122,7 @@
           :disabled="edit"
           @click="guardarOpcionesEmpleado"
         >
-          <v-icon left dark>mdi-plus</v-icon>
+          <v-icon left dark>mdi-content-save</v-icon>
           Guardar
         </v-btn>
       </v-col>
