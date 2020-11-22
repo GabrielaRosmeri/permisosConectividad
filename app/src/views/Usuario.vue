@@ -9,7 +9,11 @@
     </v-row>
     <v-row align="center">
       <v-col cols="11" align="end">
-        <v-btn color="indigo darken-4 white--text" elevation="5">
+        <v-btn
+          color="indigo darken-4 white--text"
+          elevation="5"
+          @click="abrirDialog()"
+        >
           <v-icon left dark>mdi-plus</v-icon>
           Usuario
         </v-btn>
@@ -73,6 +77,7 @@
                 </v-form>
               </v-row>
             </v-card-title>
+
             <v-data-table
               :headers="headers"
               :items="usuarios"
@@ -122,20 +127,173 @@
         </v-col>
       </v-col>
     </v-row>
+    <v-dialog v-model="dialogEjemplo" persistent scrollable max-width="60vw">
+      <v-card>
+        <v-card-title class="headline indigo darken-4">
+          <span v-if="edit" class="headline" style="color: white"
+            >Editar Usuario</span
+          >
+          <span v-else class="headline" style="color: white"
+            >Nuevo Usuario</span
+          >
+        </v-card-title>
+        <v-card-text>
+          <v-form ref="form" v-model="validD" lazy-validation>
+            <v-row>
+              <v-col :cols="edit ? '12' : '6'">
+                <v-text-field
+                  v-model="Nombre"
+                  :rules="[fieldRules.required]"
+                  label="Nombre"
+                  prepend-icon="mdi-domain"
+                  maxlength="30"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col v-if="!edit" cols="6" class="pt-7">
+                <v-select
+                  :items="itemsPersonal"
+                  v-model="CodigoPersonal"
+                  label="Personal"
+                  prepend-icon="mdi-account"
+                  :rules="[fieldRules.required]"
+                  dense
+                ></v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col v-if="!edit" cols="6">
+                <v-select
+                  :items="itemsLocal"
+                  v-model="CodigoLocal"
+                  label="Local"
+                  prepend-icon="mdi-home"
+                  dense
+                  :rules="[fieldRules.required]"
+                ></v-select>
+              </v-col>
+              <v-col v-if="!edit" cols="6">
+                <v-select
+                  :items="optionsPerfil"
+                  v-model="CodigoPerfil"
+                  label="Perfil"
+                  prepend-icon="mdi-tag"
+                  dense
+                  :rules="[fieldRules.required]"
+                ></v-select>
+              </v-col>
+            </v-row>
+            <v-row v-if="!edit">
+              <v-col cols="6">
+                <v-text-field
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                  v-model="Clave"
+                  :rules="[fieldRules.required, fieldRules.validarClave]"
+                  label="Clave"
+                  maxlength="10"
+                  prepend-icon="mdi-domain"
+                  @click:append="show1 = !show1"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                  v-model="ConfirmarClave"
+                  :rules="[
+                    fieldRules.required,
+                    fieldRules.validarClave,
+                    confirmarClave,
+                  ]"
+                  label="Confirmar clave"
+                  maxlength="10"
+                  prepend-icon="mdi-domain"
+                  @click:append="show1 = !show1"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row v-else>
+              <v-col cols="6">
+                <v-text-field
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                  v-model="ComprobarClave"
+                  :rules="[fieldRules.validarClave]"
+                  :error-messages="errors"
+                  label="Clave actual"
+                  maxlength="10"
+                  prepend-icon="mdi-domain"
+                  @mouseup="limpiarError()"
+                  @click:append="show1 = !show1"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                  v-model="ClaveNueva"
+                  :rules="[fieldRules.validarClave]"
+                  label="Clave nueva"
+                  maxlength="10"
+                  prepend-icon="mdi-domain"
+                  @click:append="show1 = !show1"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="indigo darken-4"
+            text
+            @click="(dialogEjemplo = false), limpiar()"
+            >Cancelar</v-btn
+          >
+          <v-btn
+            :loading="saveLoading"
+            :disabled="saveLoading"
+            color="indigo darken-4"
+            class="ma-2 white--text"
+            depressed
+            @mousedown="validate"
+            @click="executeEventClick"
+            >Guardar</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-content>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import { post } from "../api/api";
+import { post, get } from "../api/api";
 export default {
   data: () => ({
     todosU: false,
     valid: true,
     loading: false,
     disabled: true,
+    show1: false,
+    show2: true,
+    edit: false,
+    alert: false,
+    saveLoading: false,
+    dialogEjemplo: false,
+    optionsPerfil: [],
+    itemsLocal: [],
+    itemsPersonal: [],
+    confirmar: true,
+    comprobar: true,
+    validD: true,
     fieldRules: {
       required: (v) => !!v || "Campo requerido",
+      validarClave: (v) => v.length <= 10 || "Clave incorrecta",
     },
     headers: [
       {
@@ -162,7 +320,14 @@ export default {
     busqueda: "",
     atributo: "",
     usuarios: [],
-    estadoU: [1],
+    Nombre: "",
+    CodigoPersonal: "",
+    CodigoPerfil: "",
+    Clave: "",
+    CodigoLocal: "",
+    ConfirmarClave: "",
+    ComprobarClave: "",
+    ClaveNueva: "",
   }),
   computed: {
     ...mapState(["user"]),
@@ -176,6 +341,41 @@ export default {
     },
     limpiarValidate() {
       this.$refs.form.resetValidation();
+    },
+    abrirDialog() {
+      this.dialogEjemplo = true;
+      this.mostrarPerfil();
+      this.mostrarPersonal();
+      this.mostrarLocal();
+    },
+    limpiar() {
+      this.Nombre = "";
+      this.CodigoPersonal = "";
+      this.CodigoPerfil = "";
+      this.Nombre = "";
+      this.Clave = "";
+      this.CodigoLocal = "";
+      this.ConfirmarClave = "";
+      this.edit = false;
+      this.ClaveNueva = "";
+      this.ComprobarClave = "";
+      this.$refs.form.resetValidation();
+    },
+    confirmarClave(value) {
+      if (value === this.Clave) {
+        this.confirmar = true;
+        return true;
+      } else {
+        this.confirmar = false;
+        return "Clave no coincide.";
+      }
+    },
+    executeEventClick() {
+      if (this.edit === false) {
+        this.registerUsuario();
+      } else {
+        this.editUsuario();
+      }
     },
     changeUsuario() {
       if (this.todosU === true) {
@@ -205,6 +405,26 @@ export default {
         }
         this.loading = false;
         this.usuarios = data;
+      });
+    },
+    mostrarPerfil() {
+      get("usuariosperfil").then((data) => {
+        this.optionsPerfil = data;
+      });
+    },
+    mostrarPersonal() {
+      get("usuariospersonal").then((data) => {
+        this.itemsPersonal = data;
+      });
+    },
+    assembleLocal() {
+      return {
+        empresa: this.empresa,
+      };
+    },
+    mostrarLocal() {
+      post("usuarioslocal", this.assembleLocal()).then((data) => {
+        this.itemsLocal = data;
       });
     },
   },

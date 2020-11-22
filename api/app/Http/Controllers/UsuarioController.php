@@ -103,4 +103,42 @@ class UsuarioController extends Controller
 
         return response()->json($usuario, 200);
     }
+
+    public function listarPorPerfil()
+    {
+        $respuesta = [];
+        $perfil = DB::table('perfil as p')
+            ->select('p.Codigo', 'p.Nombre')
+            ->get();
+        foreach ($perfil as $p) {
+            array_push($respuesta, array("value" => $p->Codigo, "text" => $p->Nombre));
+        }
+        return response()->json($respuesta, 200);
+    }
+
+    public function listarPorPersonal()
+    {
+        $respuesta = [];
+        $personal = DB::table('personal as p')
+            ->select('p.Codigo', 'p.Nombres', 'p.ApellidoPaterno', 'p.ApellidoMaterno')
+            ->get();
+        foreach ($personal as $p) {
+            array_push($respuesta, array("value" => $p->Codigo, "text" => $p->Nombres . " " . $p->ApellidoPaterno . " " . $p->ApellidoMaterno));
+        }
+        return response()->json($respuesta, 200);
+    }
+
+    public function listarPorLocal(Request $request)
+    {
+        $respuesta = [];
+        $empresa = $request->get('empresa');
+        $local = DB::table('local as l')
+            ->select('l.Codigo', 'l.Nombre')
+            ->where('l.CodigoEmpresa', '=', $empresa)
+            ->get();
+        foreach ($local as $l) {
+            array_push($respuesta, array("value" => $l->Codigo, "text" => $l->Nombre));
+        }
+        return response()->json($respuesta, 200);
+    }
 }
