@@ -88,7 +88,7 @@ class PermisoUsuarioController extends Controller
                 array_push($children, array("id" => $opO["codigo"], "name" => $opO["opcion"]));
                 $valor = false;
             }
-            array_push($respuesta, array("id" => $op->sistemaNombre, "name" => $op->sistemaNombre, "children" => $children));
+            array_push($respuesta, array("id" => $op->sistemaNombre, "name" => $op->sistemaNombre, "children" => $children, "file" => $op->icono));
         }
 
         //? Permisos no asignados
@@ -126,7 +126,7 @@ class PermisoUsuarioController extends Controller
                 }
             }
             if (sizeof($children) != 0) {
-                array_push($noAsignado, array("id" => $sOp->sistemaNombre, "name" => $sOp->sistemaNombre, "children" => $children));
+                array_push($noAsignado, array("id" => $sOp->sistemaNombre, "name" => $sOp->sistemaNombre, "children" => $children, "file" => $sOp->icono));
             }
         }
 

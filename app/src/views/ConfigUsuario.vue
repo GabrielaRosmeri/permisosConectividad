@@ -80,7 +80,13 @@
                   :items="opciones"
                   selected-color="indigo darken-4"
                   @input="cambiarEdit"
-                ></v-treeview>
+                >
+                  <template v-slot:prepend="{ item }">
+                    <v-icon>
+                      {{ item.file }}
+                    </v-icon>
+                  </template>
+                </v-treeview>
               </v-col>
             </v-container>
           </v-card-text>
@@ -110,7 +116,13 @@
                   :items="opcionesNoAsignados"
                   selected-color="indigo darken-4"
                   @input="cambiarEdit"
-                ></v-treeview>
+                >
+                  <template v-slot:prepend="{ item }">
+                    <v-icon>
+                      {{ item.file }}
+                    </v-icon>
+                  </template>
+                </v-treeview>
               </v-col>
             </v-container>
           </v-card-text>
@@ -195,6 +207,7 @@ export default {
     },
     cargarOpciones() {
       post("listaOpcionesEmpleados", this.assembleOpcion()).then((data) => {
+        console.log(data);
         this.mostrarRow = true;
         this.opciones = data.opcion;
         this.active = data.active;
