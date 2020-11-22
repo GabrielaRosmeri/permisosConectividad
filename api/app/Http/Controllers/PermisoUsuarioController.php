@@ -136,6 +136,7 @@ class PermisoUsuarioController extends Controller
     public function registrarPermisos(Request $request)
     {
         $opcion = $request->get('opcion');
+        $opcionNueva = $request->get('opcionNuevo');
         $usuario = $request->get('usuario');
         // ? BUSCAR OPCIONES DEL USUARIO
         $opcionEmpleado = DB::table('permisousuario as pu')
@@ -163,7 +164,7 @@ class PermisoUsuarioController extends Controller
             }
         }
         // ? AGREGAR OPCIONES
-        foreach ($opcion as $op) {
+        foreach ($opcionNueva as $op) {
             $valorN = true;
             foreach ($opcionEmpleado as $opE) {
                 if ($opE->CodigoOpcion == $op) {

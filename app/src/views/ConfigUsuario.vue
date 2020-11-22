@@ -185,6 +185,7 @@ export default {
       return {
         usuario: this.empleado,
         opcion: this.active,
+        opcionNuevo: this.noAsignados,
       };
     },
     guardarOpcionesEmpleado() {
