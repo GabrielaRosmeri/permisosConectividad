@@ -145,7 +145,7 @@
                   v-model="Nombre"
                   :rules="[fieldRules.required]"
                   label="Nombre"
-                  prepend-icon="mdi-domain"
+                  prepend-icon="mdi-account-card-details"
                   maxlength="30"
                   required
                 ></v-text-field>
@@ -192,7 +192,7 @@
                   :rules="[fieldRules.required, fieldRules.validarClave]"
                   label="Clave"
                   maxlength="10"
-                  prepend-icon="mdi-domain"
+                  prepend-icon="mdi-lock"
                   @click:append="show1 = !show1"
                   required
                 ></v-text-field>
@@ -209,7 +209,7 @@
                   ]"
                   label="Confirmar clave"
                   maxlength="10"
-                  prepend-icon="mdi-domain"
+                  prepend-icon="mdi-lock"
                   @click:append="show1 = !show1"
                   required
                 ></v-text-field>
@@ -226,7 +226,7 @@
                   label="Clave actual"
                   placeholder="Ingresar clave actual"
                   maxlength="10"
-                  prepend-icon="mdi-domain"
+                  prepend-icon="mdi-lock"
                   @mouseup="limpiarError()"
                   @click:append="show1 = !show1"
                 ></v-text-field>
@@ -240,7 +240,7 @@
                   label="Clave nueva"
                   placeholder="Ingresar nueva clave"
                   maxlength="10"
-                  prepend-icon="mdi-domain"
+                  prepend-icon="mdi-lock"
                   @click:append="show1 = !show1"
                   required
                 ></v-text-field>
