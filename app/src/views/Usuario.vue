@@ -129,14 +129,24 @@
     </v-row>
     <v-dialog v-model="dialogEjemplo" persistent scrollable max-width="60vw">
       <v-card>
-        <v-card-title class="headline indigo darken-4">
-          <span v-if="edit" class="headline" style="color: white"
-            >Editar Usuario</span
+        <v-card-title
+          class="headline"
+          style="
+            border-left: 5px solid #1a237e !important;
+            color: #90a4ae !important;
+            background: #e8eaf6 !important;
+          "
+        >
+          <v-icon v-if="edit" style="color: #90a4ae !important"
+            >mdi-account-settings</v-icon
           >
-          <span v-else class="headline" style="color: white"
-            >Nuevo Usuario</span
+          <v-icon v-else style="color: #90a4ae !important"
+            >mdi-account-plus</v-icon
           >
+          <h6 v-if="edit" class="pl-3">Editar Usuario</h6>
+          <h6 v-else class="pl-3">Nuevo Usuario</h6>
         </v-card-title>
+        <v-divider></v-divider>
         <v-card-text>
           <v-form ref="form" v-model="validD" lazy-validation>
             <v-row>
@@ -451,6 +461,7 @@ export default {
         Nombre: this.Nombre,
         Clave: this.Clave,
         CodigoLocal: this.CodigoLocal,
+        Tipo: "Personal"
       };
     },
     registerUsuario() {

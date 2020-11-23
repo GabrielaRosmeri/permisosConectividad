@@ -169,6 +169,7 @@ class UsuarioController extends Controller
         $usuario->Nombre = $request->get('Nombre');
         $usuario->Clave = Hash::make($request->get('Clave'));
         $usuario->CodigoLocal = $request->get('CodigoLocal');
+        $usuario->Tipo = $request->get('Tipo');
         $usuario->save();
 
         return response()->json($usuario, 201);

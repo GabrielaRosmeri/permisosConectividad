@@ -1,7 +1,7 @@
 <template>
   <v-content>
     <v-container fill-height grid-list-lg>
-      <v-layout align-center justify-center style="padding: 100px">
+      <v-layout align-center justify-center style="padding: 60px">
         <v-flex xs12>
           <v-form ref="form" v-model="valid" @submit.prevent="login">
             <v-layout row wrap>

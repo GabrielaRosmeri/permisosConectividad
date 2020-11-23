@@ -18,6 +18,7 @@ class Usuario extends Model
         'Nombre',
         'Clave',
         'CodigoLocal',
+        'Tipo',
         'Vigencia'
     ];
 }
