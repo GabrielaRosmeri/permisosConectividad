@@ -107,6 +107,20 @@
                     <v-icon
                       v-bind="attrs"
                       v-on="on"
+                      color="teal accent-4"
+                      class="mr-2"
+                      @click="showEditUsuario(item)"
+                    >
+                      mdi-lock-reset</v-icon
+                    >
+                  </template>
+                  <span>Reestablecer contraseña</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
                       class="mr-2"
                       :color="item.Vigencia ? 'red lighten-1' : 'green'"
                       @click="deleteUsuario(item)"
@@ -324,8 +338,8 @@ export default {
       },
       { text: "Usuario", value: "Usuario", width: "20%" },
       { text: "Perfil", value: "Perfil", width: "20%" },
-      { text: "Local", value: "Local", width: "20%" },
-      { text: "Acciones", value: "actions", width: "10%" },
+      { text: "Local", value: "Local", width: "15%" },
+      { text: "Acciones", value: "actions", width: "15%" },
     ],
     items: [
       { text: "Nombre", value: "p.Nombres" },
