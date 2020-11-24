@@ -320,15 +320,16 @@ export default {
         value: "Nombres",
         width: "20%",
       },
-      { text: "Perfil", value: "Perfil", width: "30%" },
-      { text: "Local", value: "Local", width: "30%" },
+      { text: "Usuario", value: "Usuario", width: "20%" },
+      { text: "Perfil", value: "Perfil", width: "20%" },
+      { text: "Local", value: "Local", width: "20%" },
       { text: "Acciones", value: "actions", width: "10%" },
     ],
     items: [
       { text: "Nombre", value: "p.Nombres" },
       { text: "Perfil", value: "pf.Nombre" },
       { text: "Local", value: "l.Nombre" },
-      { text: "Acciones", value: "actions", width: "10%" },
+      { text: "Usuario", value: "u.Nombre" },
     ],
     busqueda: "",
     atributo: "",
@@ -461,7 +462,7 @@ export default {
         Nombre: this.Nombre,
         Clave: this.Clave,
         CodigoLocal: this.CodigoLocal,
-        Tipo: "Personal"
+        Tipo: "Personal",
       };
     },
     registerUsuario() {
