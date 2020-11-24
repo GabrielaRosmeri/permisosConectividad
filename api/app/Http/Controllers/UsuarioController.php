@@ -202,14 +202,19 @@ class UsuarioController extends Controller
                 return response()->json(array("msg" => "Contrase;a no coincide"), 501); //el msg de aqui no sirve por ahora 
             }
         }
-        $usuario = Usuario::findOrFail($id);
-        $usuario->Nombre = $request->get('Nombre');
-        if ($request->get('Clave') != '') {
-            $usuario->Clave = Hash::make($request->get('Clave'));
-        }
-        $usuario->save();
+        $usuarioBuscar = Usuario::where('Nombre', '=', $request->get('Nombre'))->where('Codigo', '!=', $id)->get()->first();
+        if (!$usuarioBuscar) {
+            $usuario = Usuario::findOrFail($id);
+            $usuario->Nombre = $request->get('Nombre');
+            if ($request->get('Clave') != '') {
+                $usuario->Clave = Hash::make($request->get('Clave'));
+            }
+            $usuario->save();
 
-        return response()->json($usuario, 200);
+            return response()->json($usuario, 200);
+        } else {
+            return response()->json(array("msg" => "Usuario ya existe."), 404); //el msg de aqui no sirve por ahora 
+        }
     }
 
 

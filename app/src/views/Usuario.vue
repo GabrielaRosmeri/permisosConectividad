@@ -519,8 +519,13 @@ export default {
           });
           this.$refs.usuarioTable.fetchData();
         })
-        .catch(() => {
-          this.errors = ["Contrase;a no valida"];
+        .catch((e) => {
+          if (e.message == 404) {
+            this.errorsU = ["Usuario ya existe"];
+          }
+          if (e.message == 501) {
+            this.errors = ["Contrase;a no valida"];
+          }
           this.saveLoading = false;
         });
     },

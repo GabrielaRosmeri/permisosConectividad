@@ -21,6 +21,9 @@ async function call(peticion, datos, method) {
         if (res.status == 404) {
             throw new Error("404");
         }
+        if (res.status == 501) {
+            throw new Error("501");
+        }
     }
     return res.json();
 }
