@@ -170,16 +170,21 @@ class UsuarioController extends Controller
             return response()->json($validacion->errors()->first(), 400);
         }
 
-        $usuario = new Usuario();
-        $usuario->CodigoPersonal = $request->get('CodigoPersonal');
-        $usuario->CodigoPerfil = $request->get('CodigoPerfil');
-        $usuario->Nombre = $request->get('Nombre');
-        $usuario->Clave = Hash::make($request->get('Clave'));
-        $usuario->CodigoLocal = $request->get('CodigoLocal');
-        $usuario->Tipo = $request->get('Tipo');
-        $usuario->save();
+        $buscarUsuario = Usuario::where('Nombre', '=', $request->get('Nombre'))->get()->first();
+        if (!$buscarUsuario) {
+            $usuario = new Usuario();
+            $usuario->CodigoPersonal = $request->get('CodigoPersonal');
+            $usuario->CodigoPerfil = $request->get('CodigoPerfil');
+            $usuario->Nombre = $request->get('Nombre');
+            $usuario->Clave = Hash::make($request->get('Clave'));
+            $usuario->CodigoLocal = $request->get('CodigoLocal');
+            $usuario->Tipo = $request->get('Tipo');
+            $usuario->save();
 
-        return response()->json($usuario, 201);
+            return response()->json($usuario, 201);
+        } else {
+            return response()->json(array("msg" => "Usuario ya existe."), 404); //el msg de aqui no sirve por ahora 
+        }
     }
 
     public function actualizar(Request $request, $id)

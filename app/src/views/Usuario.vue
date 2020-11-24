@@ -157,6 +157,7 @@
                   label="Nombre"
                   prepend-icon="mdi-account-card-details"
                   maxlength="30"
+                  :error-messages="errorsU"
                   required
                 ></v-text-field>
               </v-col>
@@ -343,6 +344,7 @@ export default {
     ComprobarClave: "",
     ClaveNueva: "",
     errors: [],
+    errorsU: [],
   }),
   computed: {
     ...mapState(["user"]),
@@ -389,7 +391,6 @@ export default {
       }
     },
     comprobarClave() {
-      console.log(this.comprobar);
       if (this.comprobar === false) {
         return "Clave no coincide.";
       } else {
@@ -469,19 +470,26 @@ export default {
       if (this.validD == false) return;
       if (this.confirmar == false) return;
       this.saveLoading = true;
-      post("usuarios", this.assembleRegistrar()).then(() => {
-        this.saveLoading = false;
-        this.dialogEjemplo = false;
-        this.limpiar();
-        Swal.fire({
-          title: "Sistema",
-          text: "Usuario registrado correctamente.",
-          icon: "success",
-          confirmButtonText: "OK",
-          timer: 2500,
+      post("usuarios", this.assembleRegistrar())
+        .then(() => {
+          this.saveLoading = false;
+          this.dialogEjemplo = false;
+          this.limpiar();
+          Swal.fire({
+            title: "Sistema",
+            text: "Usuario registrado correctamente.",
+            icon: "success",
+            confirmButtonText: "OK",
+            timer: 2500,
+          });
+          this.actualizarUsuarios();
+        })
+        .catch((e) => {
+          if (e.message == 404) {
+            this.errorsU = ["Usuario ya existe"];
+          }
+          this.saveLoading = false;
         });
-        this.actualizarUsuarios();
-      });
     },
     assembleEdit() {
       return {

@@ -5,6 +5,7 @@ export async function get(peticion) {
     let res = await fetch(url + peticion, {
         headers: { Authorization: getUser().token },
     });
+    if (!res.ok) throw new Error(res.status);
     return res.json();
 }
 async function call(peticion, datos, method) {
@@ -16,7 +17,11 @@ async function call(peticion, datos, method) {
             Authorization: getUser() == null ? "" : getUser().token,
         },
     });
-
+    if (!res.ok) {
+        if (res.status == 404) {
+            throw new Error("404");
+        }
+    }
     return res.json();
 }
 export async function post(peticion, datos) {
