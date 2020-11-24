@@ -158,6 +158,7 @@
                   prepend-icon="mdi-account-card-details"
                   maxlength="30"
                   :error-messages="errorsU"
+                  @mouseup="limpiarError()"
                   required
                 ></v-text-field>
               </v-col>
@@ -380,6 +381,7 @@ export default {
     },
     limpiarError() {
       this.errors = [];
+      this.errorsU = [];
     },
     confirmarClave(value) {
       if (value === this.Clave) {
