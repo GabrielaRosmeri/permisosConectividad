@@ -30,11 +30,9 @@
           "
         >
           <v-icon v-if="edit" style="color: #90a4ae !important"
-            >mdi-account-settings</v-icon
+            >mdi-book</v-icon
           >
-          <v-icon v-else style="color: #90a4ae !important"
-            >mdi-account-plus</v-icon
-          >
+          <v-icon v-else style="color: #90a4ae !important">mdi-book</v-icon>
           <h6 v-if="edit" class="pl-3">Editar Categoria</h6>
           <h6 v-else class="pl-3">Nueva Categoria</h6>
         </v-card-title>
