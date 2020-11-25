@@ -39,3 +39,4 @@ Route::get('usuarios/{id}', [UsuarioController::class, 'leer'])->middleware('tok
 Route::post('usuarios', [UsuarioController::class, 'registrar'])->middleware('token');
 Route::put('usuarios/{id}', [UsuarioController::class, 'actualizar'])->middleware('token');
 Route::patch('usuario/{id}', [UsuarioController::class, 'cambiarVigencia'])->middleware('token');
+Route::put('reestablecer/{id}', [UsuarioController::class, 'reestablecerContraseña'])->middleware('token');

@@ -226,4 +226,13 @@ class UsuarioController extends Controller
 
         return response()->json($usuario, 200);
     }
+
+    public function reestablecerContraseña(Request $request, $id)
+    {
+        $usuario = Usuario::findOrFail($id);
+        $usuario->Clave = $request->get('clave');
+        $usuario->save();
+
+        return response()->json($usuario, 200);
+    }
 }

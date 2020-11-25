@@ -110,7 +110,7 @@
                       v-on="on"
                       color="teal accent-4"
                       class="mr-2"
-                      @click="showReestablecer()"
+                      @click="showReestablecer(item)"
                     >
                       mdi-lock-reset</v-icon
                     >
@@ -382,7 +382,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { post, get, put } from "../api/api";
+import { post, get, put, patch } from "../api/api";
 import Swal from "sweetalert2";
 export default {
   data: () => ({
@@ -604,7 +604,7 @@ export default {
       };
     },
     editUsuario() {
-      if (this.valid == false) return;
+      if (this.validD == false) return;
       this.saveLoading = true;
       put("usuarios/" + this.editId, this.assembleEdit())
         .then(() => {
@@ -613,6 +613,8 @@ export default {
           this.saveLoading = false;
           this.editId = null;
           this.dialogEjemplo = false;
+          this.actualizarUsuarios();
+          this.busquedaUsuario();
           Swal.fire({
             title: "Sistema",
             text: "Usuario actualizado correctamente.",
@@ -631,6 +633,57 @@ export default {
           }
           this.saveLoading = false;
         });
+    },
+    deleteUsuario(usuario) {
+      patch("usuario/" + usuario.Codigo)
+        .then((data) => {
+          if (data.Vigencia == false) {
+            Swal.fire({
+              title: "Sistema",
+              text: "Usuario dado de baja correctamente.",
+              icon: "success",
+              confirmButtonText: "OK",
+              timer: 2500,
+            });
+          } else {
+            Swal.fire({
+              title: "Sistema",
+              text: "Usuario dado de alta correctamente.",
+              icon: "success",
+              confirmButtonText: "OK",
+              timer: 2500,
+            });
+          }
+          this.actualizarUsuarios();
+          this.busquedaUsuario();
+        })
+        .catch(() => {
+          this.alert = true;
+        });
+    },
+    reestablerContraseña() {
+      if (this.validR == false) return;
+      this.saveLoading = true;
+      put("reestablecer/" + this.editId, this.assembleEdit()).then(() => {
+        this.limpiar();
+        this.comprobar = true;
+        this.saveLoading = false;
+        this.editId = null;
+        this.dialogEjemplo = false;
+        Swal.fire({
+          title: "Sistema",
+          text: "Usuario actualizado correctamente.",
+          icon: "success",
+          confirmButtonText: "OK",
+          timer: 2500,
+        });
+        this.$refs.usuarioTable.fetchData();
+      });
+    },
+    actualizarUsuarios() {
+      get("usuarios").then((data) => {
+        this.usuarios = data;
+      });
     },
     async mostrarUsuario(codigo) {
       const usuario = await get("usuarios/" + codigo);
