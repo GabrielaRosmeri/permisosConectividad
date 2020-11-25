@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LocalController;
 use App\Http\Controllers\PermisoUsuarioController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Http\Request;
@@ -40,3 +41,9 @@ Route::post('usuarios', [UsuarioController::class, 'registrar'])->middleware('to
 Route::put('usuarios/{id}', [UsuarioController::class, 'actualizar'])->middleware('token');
 Route::patch('usuario/{id}', [UsuarioController::class, 'cambiarVigencia'])->middleware('token');
 Route::put('reestablecer/{id}', [UsuarioController::class, 'reestablecerContraseña'])->middleware('token');
+
+//* CRUD DE LOCAL
+Route::post('local', [LocalController::class, 'registrar'])->middleware('token');
+Route::put('locales/{Codigo}', [LocalController::class, 'actualizar'])->middleware('token');
+Route::post("locales", [LocalController::class, 'Listar'])->middleware('token');
+Route::patch("locales/{Vigencia}", [LocalController::class, 'cambiarEstadoLocal'])->middleware('token');
