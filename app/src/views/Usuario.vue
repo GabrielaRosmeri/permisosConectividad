@@ -606,7 +606,6 @@ export default {
             confirmButtonText: "OK",
             timer: 2500,
           });
-          this.actualizarUsuarios();
         })
         .catch((e) => {
           if (e.message == 404) {
