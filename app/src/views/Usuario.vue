@@ -7,6 +7,7 @@
         </h2>
       </v-col>
     </v-row>
+    <!-- INICIO DE VISTA -->
     <v-row align="center">
       <v-col cols="11" align="end">
         <v-btn
@@ -109,7 +110,7 @@
                       v-on="on"
                       color="teal accent-4"
                       class="mr-2"
-                      @click="showEditUsuario(item)"
+                      @click="showReestablecer()"
                     >
                       mdi-lock-reset</v-icon
                     >
@@ -141,6 +142,8 @@
         </v-col>
       </v-col>
     </v-row>
+    <!-- FINALIZACION -->
+    <!-- DIALOG DE REGISTAR Y EDITAR -->
     <v-dialog v-model="dialogEjemplo" persistent scrollable max-width="60vw">
       <v-card>
         <v-card-title
@@ -295,6 +298,85 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- FINALIZACION -->
+    <!-- DIALOG DE REESTABLECER -->
+    <v-dialog
+      v-model="dialogReestablecer"
+      persistent
+      scrollable
+      max-width="60vw"
+    >
+      <v-card>
+        <v-card-title
+          class="headline"
+          style="
+            border-left: 5px solid #1a237e !important;
+            color: #90a4ae !important;
+            background: #e8eaf6 !important;
+          "
+        >
+          <v-icon style="color: #90a4ae !important">mdi-lock-reset</v-icon>
+          <h6 class="pl-3">Reestablecer Contraseña</h6>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-form ref="form" v-model="validR" lazy-validation>
+            <v-row>
+              <v-col cols="6">
+                <v-text-field
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                  v-model="nuevaClave"
+                  :rules="[fieldRules.required, fieldRules.validarClave]"
+                  label="Clave"
+                  maxlength="10"
+                  prepend-icon="mdi-lock"
+                  @click:append="show1 = !show1"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                  v-model="confirmarNuevaClave"
+                  :rules="[
+                    fieldRules.required,
+                    fieldRules.validarClave,
+                    confirmarClave,
+                  ]"
+                  label="Confirmar clave"
+                  maxlength="10"
+                  prepend-icon="mdi-lock"
+                  @click:append="show1 = !show1"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="indigo darken-4"
+            text
+            @click="(dialogReestablecer = false), limpiar()"
+            >Cancelar</v-btn
+          >
+          <v-btn
+            :loading="saveLoading"
+            :disabled="saveLoading"
+            color="indigo darken-4"
+            class="ma-2 white--text"
+            depressed
+            @mousedown="validate"
+            @click="executeEventClick"
+            >Guardar</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- FINALIZACION -->
   </v-content>
 </template>
 
@@ -314,12 +396,14 @@ export default {
     alert: false,
     saveLoading: false,
     dialogEjemplo: false,
+    dialogReestablecer: false,
     optionsPerfil: [],
     itemsLocal: [],
     itemsPersonal: [],
     confirmar: true,
     comprobar: true,
     validD: true,
+    validR: true,
     fieldRules: {
       required: (v) => !!v || "Campo requerido",
       validarClave: (v) => v.length <= 10 || "Clave incorrecta",
@@ -358,6 +442,8 @@ export default {
     ConfirmarClave: "",
     ComprobarClave: "",
     ClaveNueva: "",
+    nuevaClave: "",
+    confirmarNuevaClave: "",
     errors: [],
     errorsU: [],
   }),
@@ -471,6 +557,9 @@ export default {
         this.mostrarPersonal();
         this.mostrarLocal();
       });
+    },
+    showReestablecer() {
+      this.dialogReestablecer = true;
     },
     assembleRegistrar() {
       return {
