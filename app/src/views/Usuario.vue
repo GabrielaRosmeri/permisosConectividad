@@ -181,25 +181,27 @@
               </v-col>
               <v-col v-if="!edit" cols="6" class="pt-7">
                 <v-select
-                  :items="itemsPersonal"
-                  v-model="CodigoPersonal"
-                  label="Personal"
-                  prepend-icon="mdi-account"
-                  :rules="[fieldRules.required]"
-                  dense
-                ></v-select>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col v-if="!edit" cols="6">
-                <v-select
                   :items="itemsLocal"
                   v-model="CodigoLocal"
                   label="Local"
                   prepend-icon="mdi-home"
                   dense
                   :rules="[fieldRules.required]"
+                  @change="mostrarPersonal"
                 ></v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col v-if="!edit" cols="6">
+                <v-autocomplete
+                  :items="itemsPersonal"
+                  v-model="CodigoPersonal"
+                  label="Personal"
+                  prepend-icon="mdi-account"
+                  :rules="[fieldRules.required]"
+                  dense
+                  clearable
+                ></v-autocomplete>
               </v-col>
               <v-col v-if="!edit" cols="6">
                 <v-select
@@ -543,11 +545,6 @@ export default {
         this.optionsPerfil = data;
       });
     },
-    mostrarPersonal() {
-      get("usuariospersonal").then((data) => {
-        this.itemsPersonal = data;
-      });
-    },
     assembleLocal() {
       return {
         empresa: this.empresa,
@@ -556,6 +553,16 @@ export default {
     mostrarLocal() {
       post("usuarioslocal", this.assembleLocal()).then((data) => {
         this.itemsLocal = data;
+      });
+    },
+    assembleEmpleado() {
+      return {
+        local: this.CodigoLocal,
+      };
+    },
+    mostrarPersonal() {
+      post("usuariospersonal", this.assembleEmpleado()).then((data) => {
+        this.itemsPersonal = data;
       });
     },
     showEditUsuario(usuario) {

@@ -122,11 +122,14 @@ class UsuarioController extends Controller
         return response()->json($respuesta, 200);
     }
 
-    public function listarPorPersonal()
+    public function listarPorPersonal(Request $request)
     {
         $respuesta = [];
-        $personal = DB::table('personal as p')
+        $personal = DB::table('local as l')
+            ->join('localpersonal as lp', 'lp.CodigoLocal', '=', 'l.Codigo')
+            ->join('personal as p', 'p.Codigo', '=', 'lp.CodigoPersonal')
             ->select('p.Codigo', 'p.Nombres', 'p.ApellidoPaterno', 'p.ApellidoMaterno')
+            ->where('l.Codigo', '=', $request->get('local'))
             ->get();
         foreach ($personal as $p) {
             array_push($respuesta, array("value" => $p->Codigo, "text" => $p->Nombres . " " . $p->ApellidoPaterno . " " . $p->ApellidoMaterno));

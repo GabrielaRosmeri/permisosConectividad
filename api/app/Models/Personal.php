@@ -22,7 +22,6 @@ class Personal extends Model
         'Telefono',
         'Correo',
         'Celular',
-        'CodigoSistemaPensiones',
-        'Vigencia'
+        'CodigoSistemaPensiones'
     ];
 }
