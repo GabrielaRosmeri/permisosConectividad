@@ -149,7 +149,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { get, enviarConArchivos, patch, post } from "../api/api";
+import { get, put, patch, post } from "../api/api";
 import Swal from "sweetalert2";
 export default {
   data() {
@@ -292,7 +292,7 @@ export default {
     actualizar() {
       if (this.valid == false) return;
       this.saveLoading = true;
-      enviarConArchivos("locales/" + this.editId, this.assembleLocal())
+      put("locales/" + this.editId, this.assembleLocal())
         .then(() => {
           this.saveLoading = false;
           this.editId = null;
@@ -315,12 +315,6 @@ export default {
     showactualizar(Local) {
       this.edit = true;
       this.editId = Local.Codigo;
-      this.mostrarLocal(Local.Codigo).then(() => {
-        this.dialogEjemplo = true;
-      });
-    },
-    verLocal(Local) {
-      this.ver = true;
       this.mostrarLocal(Local.Codigo).then(() => {
         this.dialogEjemplo = true;
       });

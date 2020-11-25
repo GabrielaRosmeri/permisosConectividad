@@ -44,6 +44,7 @@ Route::put('reestablecer/{id}', [UsuarioController::class, 'reestablecerContrase
 
 //* CRUD DE LOCAL
 Route::post('local', [LocalController::class, 'registrar'])->middleware('token');
+Route::get('locales/{Codigo}', [LocalController::class, 'leer'])->middleware('token');
 Route::put('locales/{Codigo}', [LocalController::class, 'actualizar'])->middleware('token');
 Route::post("locales", [LocalController::class, 'Listar'])->middleware('token');
 Route::patch("locales/{Vigencia}", [LocalController::class, 'cambiarEstadoLocal'])->middleware('token');

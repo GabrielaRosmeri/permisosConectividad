@@ -48,6 +48,11 @@ class LocalController extends Controller
         return response()->json($dato, 200);
     }
 
+    public function leer($Codigo)
+    {
+        $dato = Local::find($Codigo);
+        return response()->json($dato, 200);
+    }
     public function cambiarEstadoLocal($Codigo)
     {
         $vigencia = -1;
