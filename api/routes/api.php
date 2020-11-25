@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\LocalController;
 use App\Http\Controllers\PermisoUsuarioController;
 use App\Http\Controllers\UsuarioController;
@@ -48,3 +49,11 @@ Route::get('locales/{Codigo}', [LocalController::class, 'leer'])->middleware('to
 Route::put('locales/{Codigo}', [LocalController::class, 'actualizar'])->middleware('token');
 Route::post("locales", [LocalController::class, 'Listar'])->middleware('token');
 Route::patch("locales/{Vigencia}", [LocalController::class, 'cambiarEstadoLocal'])->middleware('token');
+
+//* CRUD DE CATEGORIA
+Route::post('categorias', [CategoriaController::class, 'listar'])->middleware('token');
+Route::get('categorias/{id}', [CategoriaController::class, 'leer'])->middleware('token');
+Route::post('categoria', [CategoriaController::class, 'registrar'])->middleware('token');
+Route::put('categorias/{id}', [CategoriaController::class, 'actualizar'])->middleware('token');
+Route::patch('categoria/{id}', [CategoriaController::class, 'cambiarVigencia'])->middleware('token');
+// *********************************************************

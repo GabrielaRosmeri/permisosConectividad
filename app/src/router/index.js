@@ -123,9 +123,9 @@ const routes = [
     },
   },
   {
-    path: "/depositos",
-    name: "Depositos",
-    component: () => import("../views/Local.vue"),
+    path: "/categoria",
+    name: "Categorias",
+    component: () => import("../views/Categoria.vue"),
     meta: {
       auth: true,
       admin: true,
