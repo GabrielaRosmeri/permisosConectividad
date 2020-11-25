@@ -343,7 +343,7 @@
                   :rules="[
                     fieldRules.required,
                     fieldRules.validarClave,
-                    confirmarClave,
+                    confirmarReestablecer,
                   ]"
                   label="Confirmar clave"
                   maxlength="10"
@@ -370,7 +370,7 @@
             class="ma-2 white--text"
             depressed
             @mousedown="validate"
-            @click="executeEventClick"
+            @click="reestabler"
             >Guardar</v-btn
           >
         </v-card-actions>
@@ -477,6 +477,8 @@ export default {
       this.edit = false;
       this.ClaveNueva = "";
       this.ComprobarClave = "";
+      this.nuevaClave = "";
+      this.confirmarNuevaClave = "";
       this.$refs.form.resetValidation();
     },
     limpiarError() {
@@ -485,6 +487,15 @@ export default {
     },
     confirmarClave(value) {
       if (value === this.Clave) {
+        this.confirmar = true;
+        return true;
+      } else {
+        this.confirmar = false;
+        return "Clave no coincide.";
+      }
+    },
+    confirmarReestablecer(value) {
+      if (value === this.nuevaClave) {
         this.confirmar = true;
         return true;
       } else {
@@ -558,7 +569,8 @@ export default {
         this.mostrarLocal();
       });
     },
-    showReestablecer() {
+    showReestablecer(usuario) {
+      this.editId = usuario.Codigo;
       this.dialogReestablecer = true;
     },
     assembleRegistrar() {
@@ -661,24 +673,31 @@ export default {
           this.alert = true;
         });
     },
-    reestablerContraseña() {
+    assembleReestablecer() {
+      return {
+        clave: this.nuevaClave, // y la antigua? ay
+      };
+    },
+    reestabler() {
+      console.log(this.validR, this.confirmar);
       if (this.validR == false) return;
+      if (this.confirmar == false) return;
       this.saveLoading = true;
-      put("reestablecer/" + this.editId, this.assembleEdit()).then(() => {
-        this.limpiar();
-        this.comprobar = true;
-        this.saveLoading = false;
-        this.editId = null;
-        this.dialogEjemplo = false;
-        Swal.fire({
-          title: "Sistema",
-          text: "Usuario actualizado correctamente.",
-          icon: "success",
-          confirmButtonText: "OK",
-          timer: 2500,
-        });
-        this.$refs.usuarioTable.fetchData();
-      });
+      put("reestablecer/" + this.editId, this.assembleReestablecer()).then(
+        () => {
+          this.limpiar();
+          this.saveLoading = false;
+          this.dialogReestablecer = false;
+          this.editId = null;
+          Swal.fire({
+            title: "Sistema",
+            text: "Contraseña reestablecida correctamente.",
+            icon: "success",
+            confirmButtonText: "OK",
+            timer: 2500,
+          });
+        }
+      );
     },
     actualizarUsuarios() {
       get("usuarios").then((data) => {

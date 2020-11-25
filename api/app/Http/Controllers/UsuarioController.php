@@ -230,7 +230,7 @@ class UsuarioController extends Controller
     public function reestablecerContraseña(Request $request, $id)
     {
         $usuario = Usuario::findOrFail($id);
-        $usuario->Clave = $request->get('clave');
+        $usuario->Clave = Hash::make($request->get('clave'));
         $usuario->save();
 
         return response()->json($usuario, 200);
