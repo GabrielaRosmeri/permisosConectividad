@@ -195,29 +195,6 @@ export default {
           class: "light  darken-4 black--text",
         },
       ],
-      headers2: [
-        {
-          text: "Nombre",
-          align: "start",
-          // sortable: false,
-          value: "Nombre",
-        },
-        { text: "Dirección", value: "Direccion" },
-        { text: "Teléfono", value: "Telefono" },
-        { text: "Acciones", value: "actions" },
-      ],
-      options2: [
-        {
-          name: "Ver",
-          icon: "mdi-eye",
-          function: this.showactualizar,
-        },
-        {
-          name: "Cambiar vigencia",
-          icon: "mdi-check-box-outline",
-          function: this.deleteLocal,
-        },
-      ],
       options: [
         {
           name: "Editar",
