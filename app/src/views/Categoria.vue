@@ -45,6 +45,8 @@
                   label="Nombre *"
                   prepend-icon="mdi-domain"
                   maxlength="30"
+                  :error-messages="errorsC"
+                  @mouseup="limpiarError()"
                   required
                 ></v-text-field>
               </v-col>
@@ -201,6 +203,7 @@ export default {
         },
       ],
       categorias: [],
+      errorsC: [],
       search: "",
       CodigoEmpresa: "",
       Nombre: "",
@@ -219,6 +222,9 @@ export default {
       this.CodigoEmpresa = "";
       this.Nombre = "";
       this.Descripcion = "";
+    },
+    limpiarError() {
+      this.errorsC = [];
     },
     executeEventClick() {
       if (this.edit === false) {
@@ -239,20 +245,26 @@ export default {
       if (this.valid == false) return;
       this.saveLoading = true;
 
-      post("categoria", this.assembleCategoria()).then(() => {
-        this.saveLoading = false;
-        this.dialogEjemplo = false;
-        this.limpiar();
-        Swal.fire({
-          title: "Sistema",
-          text: "Categoria registrada correctamente.",
-          icon: "success",
-          confirmButtonText: "OK",
+      post("categoria", this.assembleCategoria())
+        .then(() => {
+          this.saveLoading = false;
+          this.dialogEjemplo = false;
+          this.limpiar();
+          Swal.fire({
+            title: "Sistema",
+            text: "Categoria registrada correctamente.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          this.actualizarCategorias();
+        })
+        .catch((e) => {
+          if (e.message == 404) {
+            this.errorsC = ["Categoria ya existe"];
+          }
+          this.saveLoading = false;
         });
-        this.actualizarCategorias();
-      });
     },
-
     editCategoria() {
       if (this.valid == false) return;
       this.saveLoading = true;
@@ -271,8 +283,11 @@ export default {
           });
           this.actualizarCategorias();
         })
-        .catch(() => {
-          this.alert = true;
+        .catch((e) => {
+          if (e.message == 404) {
+            this.errorsC = ["Categoria ya existe"];
+          }
+          this.saveLoading = false;
         });
     },
     showEditCategoria(categoria) {
@@ -282,34 +297,29 @@ export default {
         this.dialogEjemplo = true;
       });
     },
-
     cambiarEstadoCategoria(categoria) {
-      patch("categoria/" + categoria.Codigo)
-        .then((data) => {
-          if (data.Vigencia == 1) {
-            Swal.fire({
-              position: "top-center",
-              title: "Sistema",
-              text: "Categoria habilitada con éxito",
-              icon: "success",
-              confirmButtonText: "Ok",
-              timer: 2500,
-            });
-          } else {
-            Swal.fire({
-              position: "top-center",
-              title: "Sistema",
-              text: "Categoria dada de baja con éxito ",
-              icon: "success",
-              confirmButtonText: "Ok",
-              timer: 2500,
-            });
-          }
-          this.actualizarCategorias();
-        })
-        .catch(() => {
-          this.alert = true;
-        });
+      patch("categoria/" + categoria.Codigo).then((data) => {
+        if (data.Vigencia == 1) {
+          Swal.fire({
+            position: "top-center",
+            title: "Sistema",
+            text: "Categoria habilitada con éxito",
+            icon: "success",
+            confirmButtonText: "Ok",
+            timer: 2500,
+          });
+        } else {
+          Swal.fire({
+            position: "top-center",
+            title: "Sistema",
+            text: "Categoria dada de baja con éxito ",
+            icon: "success",
+            confirmButtonText: "Ok",
+            timer: 2500,
+          });
+        }
+        this.actualizarCategorias();
+      });
     },
     assembleEmpresa() {
       return {

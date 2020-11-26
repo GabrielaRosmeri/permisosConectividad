@@ -37,17 +37,18 @@ class CategoriaController extends Controller
             return response()->json($validacion->errors()->first(), 400);
         }
 
-
-        $categoria = new Categoria();
-
-        $categoria->CodigoEmpresa = $request->get("CodigoEmpresa");
-        $categoria->Nombre = $request->get('Nombre');
-        $categoria->Descripcion = $request->get('Descripcion');
-        $categoria->Vigencia = 1;
-        $categoria->save();
-
-
-        return response()->json($categoria, 201);
+        $buscarCategoria = Categoria::where('Nombre', '=', $request->get('Nombre'))->where('CodigoEmpresa', '=', $request->get("CodigoEmpresa"))->get()->first();
+        if (!$buscarCategoria) {
+            $categoria = new Categoria();
+            $categoria->CodigoEmpresa = $request->get("CodigoEmpresa");
+            $categoria->Nombre = $request->get('Nombre');
+            $categoria->Descripcion = $request->get('Descripcion');
+            $categoria->Vigencia = 1;
+            $categoria->save();
+            return response()->json($categoria, 201);
+        } else {
+            return response()->json(array("msg" => "Categoria ya existe."), 404);
+        }
     }
 
     public function actualizar(Request $request, $id)
@@ -59,11 +60,16 @@ class CategoriaController extends Controller
         if ($validacion->fails()) {
             return response()->json($validacion, 400);
         }
-        $categoria = Categoria::findOrFail($id);
-        $categoria->Nombre = $request->get('Nombre');
-        $categoria->Descripcion = $request->get('Descripcion');
-        $categoria->update();
-        return response()->json($categoria, 200);
+        $buscarCategoria = Categoria::where('Nombre', '=', $request->get('Nombre'))->where('CodigoEmpresa', '=', $request->get("CodigoEmpresa"))->where('Codigo', '!=', $id)->get()->first();
+        if (!$buscarCategoria) {
+            $categoria = Categoria::findOrFail($id);
+            $categoria->Nombre = $request->get('Nombre');
+            $categoria->Descripcion = $request->get('Descripcion');
+            $categoria->update();
+            return response()->json($categoria, 200);
+        } else {
+            return response()->json(array("msg" => "Categoria ya existe."), 404);
+        }
     }
 
     public function cambiarVigencia($id)
