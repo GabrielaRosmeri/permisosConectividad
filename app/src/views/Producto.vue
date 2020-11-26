@@ -145,8 +145,8 @@
                       v-model="txtBuscar"
                       :rules="[fieldRules.required]"
                       label="Buscar"
+                      class="pt-8"
                       single-line
-                      hide-details
                     ></v-text-field>
                   </v-col>
                   <v-col
