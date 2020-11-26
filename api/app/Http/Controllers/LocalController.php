@@ -51,22 +51,27 @@ class LocalController extends Controller
             return response()->json($validacion->errors()->first(), 400);
         }
 
-        $Local = Local::find($Codigo);
-        if ($Local != null) {
-            $Local->Nombre = $resquest->Nombre;
-            $Local->Direccion = $resquest->Direccion;
-            $Local->Telefono = $resquest->Telefono;
-            $Local->Vigencia = 1;
-            $Local->save();
-            $dato = [
-                "Modificacion" => "EXITOSO"
-            ];
-            return response()->json($dato, 200);
+        $buscarNombre = Local::where('Nombre', '=', $resquest->Nombre)->where('Codigo', '!=', $Codigo)->get()->first();
+        if (!$buscarNombre) {
+            $Local = Local::find($Codigo);
+            if ($Local != null) {
+                $Local->Nombre = $resquest->Nombre;
+                $Local->Direccion = $resquest->Direccion;
+                $Local->Telefono = $resquest->Telefono;
+                $Local->Vigencia = 1;
+                $Local->save();
+                $dato = [
+                    "Modificacion" => "EXITOSO"
+                ];
+                return response()->json($dato, 200);
+            } else {
+                $dato = [
+                    "Modificacion" => "FALLO"
+                ];
+                return response()->json($dato, 500);
+            }
         } else {
-            $dato = [
-                "Modificacion" => "FALLO"
-            ];
-            return response()->json($dato, 500);
+            return response()->json(array("msg" => "Local ya existe."), 404); //el msg de aqui no sirve por ahora 
         }
     }
 

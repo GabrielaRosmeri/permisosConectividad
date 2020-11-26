@@ -232,7 +232,7 @@ export default {
       this.ver = false;
     },
     limpiarError() {
-      this.errorL = [];
+      this.errorsL = [];
     },
     executeEventClick() {
       if (this.edit === false) {
@@ -296,8 +296,11 @@ export default {
             timer: 2500,
           });
         })
-        .catch(() => {
-          this.alert = true;
+        .catch((e) => {
+          if (e.message == 404) {
+            this.errorsL = ["Local ya existe"];
+          }
+          this.saveLoading = false;
         });
     },
     showactualizar(Local) {
