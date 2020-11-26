@@ -75,6 +75,7 @@ class UsuarioController extends Controller
                     "empresaId" => $empresa->Codigo,
                     "modulos" => $opciones,
                     "usuarioId" => $usuario->Codigo,
+                    "local" => $usuario->CodigoLocal,
                     "token" => $token->get()
                 ), 200);
             } else {
@@ -186,18 +187,23 @@ class UsuarioController extends Controller
             return response()->json($validacion->errors()->first(), 400);
         }
 
-        $buscarUsuario = Usuario::where('Nombre', '=', $request->get('Nombre'))->get()->first();
-        if (!$buscarUsuario) {
-            $usuario = new Usuario();
-            $usuario->CodigoPersonal = $request->get('CodigoPersonal');
-            $usuario->CodigoPerfil = $request->get('CodigoPerfil');
-            $usuario->Nombre = $request->get('Nombre');
-            $usuario->Clave = Hash::make($request->get('Clave'));
-            $usuario->CodigoLocal = $request->get('CodigoLocal');
-            $usuario->Tipo = $request->get('Tipo');
-            $usuario->save();
+        $nombreUsuario = Usuario::where('Nombre', '=', $request->get('Nombre'))->get()->first();
+        if (!$nombreUsuario) {
+            $usuarioBuscar = Usuario::where('CodigoPersonal', '=', $request->get('CodigoPersonal'))->where('CodigoLocal', '=', $request->get('CodigoLocal'))->get()->first();
+            if (!$usuarioBuscar) {
+                $usuario = new Usuario();
+                $usuario->CodigoPersonal = $request->get('CodigoPersonal');
+                $usuario->CodigoPerfil = $request->get('CodigoPerfil');
+                $usuario->Nombre = $request->get('Nombre');
+                $usuario->Clave = Hash::make($request->get('Clave'));
+                $usuario->CodigoLocal = $request->get('CodigoLocal');
+                $usuario->Tipo = $request->get('Tipo');
+                $usuario->save();
 
-            return response()->json($usuario, 201);
+                return response()->json($usuario, 201);
+            } else {
+                return response()->json(array("msg" => "Usuario ya existe."), 501);
+            }
         } else {
             return response()->json(array("msg" => "Usuario ya existe."), 404); //el msg de aqui no sirve por ahora 
         }
@@ -218,8 +224,8 @@ class UsuarioController extends Controller
                 return response()->json(array("msg" => "Contrase;a no coincide"), 501); //el msg de aqui no sirve por ahora 
             }
         }
-        $usuarioBuscar = Usuario::where('Nombre', '=', $request->get('Nombre'))->where('Codigo', '!=', $id)->get()->first();
-        if (!$usuarioBuscar) {
+        $nombreBuscar = Usuario::where('Nombre', '=', $request->get('Nombre'))->where('Codigo', '!=', $id)->get()->first();
+        if (!$nombreBuscar) {
             $usuario = Usuario::findOrFail($id);
             $usuario->Nombre = $request->get('Nombre');
             if ($request->get('Clave') != '') {

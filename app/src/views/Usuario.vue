@@ -541,6 +541,9 @@ export default {
     ClaveNueva: "",
     nuevaClave: "",
     confirmarNuevaClave: "",
+    datoPersonal: "",
+    datoLocal: "",
+    datoPerfil: "",
     errors: [],
     errorsU: [],
   }),
@@ -715,6 +718,15 @@ export default {
         .catch((e) => {
           if (e.message == 404) {
             this.errorsU = ["Usuario ya existe"];
+          }
+          if (e.message == 501) {
+            Swal.fire({
+              title: "Sistema",
+              text: "Personal ya tien un usuario para este local.",
+              icon: "error",
+              confirmButtonText: "OK",
+              timer: 2500,
+            });
           }
           this.saveLoading = false;
         });
