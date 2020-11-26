@@ -25,9 +25,10 @@ class CategoriaController extends Controller
 
     public function registrar(Request $request)
     {
+        // ? VALIADACION POR PARTE DEL BACKEND
         $validacion = Validator::make($request->all(), [
-            'Nombre' => 'required|max:100',
-            'Descripcion' => 'required|max:100',
+            'Nombre' => 'required|max:30',
+            'Descripcion' => 'required|max:200',
         ], [
             'required' => ':attribute es obligatorio',
             'max' => ':attribute llego al limite de letras'
@@ -36,7 +37,7 @@ class CategoriaController extends Controller
             return response()->json($validacion->errors()->first(), 400);
         }
 
-        
+
         $categoria = new Categoria();
 
         $categoria->CodigoEmpresa = $request->get("CodigoEmpresa");
@@ -52,8 +53,8 @@ class CategoriaController extends Controller
     public function actualizar(Request $request, $id)
     {
         $validacion = Validator::make($request->all(), [
-            'Nombre' => 'required|max:100',
-            'Descripcion' => 'required|max:100',
+            'Nombre' => 'required|max:30',
+            'Descripcion' => 'required|max:200',
         ]);
         if ($validacion->fails()) {
             return response()->json($validacion, 400);

@@ -44,6 +44,7 @@
                   v-model="Nombre"
                   label="Nombre *"
                   prepend-icon="mdi-domain"
+                  maxlength="30"
                   required
                 ></v-text-field>
               </v-col>
@@ -51,6 +52,7 @@
                 <v-text-field
                   v-model="Descripcion"
                   label="Descripcion *"
+                  maxlength="100"
                   prepend-icon="mdi-domain"
                   required
                 ></v-text-field>
@@ -160,14 +162,9 @@ import { mapState } from "vuex";
 import { get, post, put, patch } from "../api/api";
 import Swal from "sweetalert2";
 export default {
-  components: {
-    //TablesMostrar: () => import("../components/TablesMostrar"),
-  },
   data() {
     return {
       edit: false,
-      //ver: false,
-      alert: false,
       valid: true,
       saveLoading: false,
       dialogEjemplo: false,
