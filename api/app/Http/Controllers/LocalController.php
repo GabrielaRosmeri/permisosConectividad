@@ -22,7 +22,7 @@ class LocalController extends Controller
         if ($validacion->fails()) {
             return response()->json($validacion->errors()->first(), 400);
         }
-        $buscarNombre = Local::where('Nombre', '=', $resquest->Nombre)->get()->first();
+        $buscarNombre = Local::where('Nombre', '=', $resquest->Nombre)->where('CodigoEmpresa', '=', $resquest->CodigoEmpresa)->get()->first();
         if (!$buscarNombre) {
             $Local = new Local();
             $Local->Nombre = $resquest->Nombre;
@@ -51,7 +51,7 @@ class LocalController extends Controller
             return response()->json($validacion->errors()->first(), 400);
         }
 
-        $buscarNombre = Local::where('Nombre', '=', $resquest->Nombre)->where('Codigo', '!=', $Codigo)->get()->first();
+        $buscarNombre = Local::where('Nombre', '=', $resquest->Nombre)->where('CodigoEmpresa', '=', $resquest->CodigoEmpresa)->where('Codigo', '!=', $Codigo)->get()->first();
         if (!$buscarNombre) {
             $Local = Local::find($Codigo);
             if ($Local != null) {
