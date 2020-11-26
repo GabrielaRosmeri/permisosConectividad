@@ -35,6 +35,8 @@ class CategoriaController extends Controller
         if ($validacion->fails()) {
             return response()->json($validacion->errors()->first(), 400);
         }
+
+        
         $categoria = new Categoria();
 
         $categoria->CodigoEmpresa = $request->get("CodigoEmpresa");

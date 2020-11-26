@@ -601,6 +601,7 @@ export default {
       this.ComprobarClave = "";
       this.nuevaClave = "";
       this.confirmarNuevaClave = "";
+      this.ConfirmarClaveEditar = "";
       this.$refs.form.resetValidation();
     },
     limpiarError() {
@@ -717,6 +718,7 @@ export default {
         Nombre: this.Nombre,
         Clave: this.Clave,
         CodigoLocal: this.CodigoLocal,
+        empresa: this.empresa,
         Tipo: "Personal",
       };
     },
@@ -757,7 +759,8 @@ export default {
       return {
         Nombre: this.Nombre,
         ComprobarClave: this.ComprobarClave,
-        Clave: this.ClaveNueva, // y la antigua? ay
+        Clave: this.ClaveNueva,
+        empresa: this.empresa,
       };
     },
     editUsuario() {

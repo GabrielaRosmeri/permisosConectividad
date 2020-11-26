@@ -187,7 +187,13 @@ class UsuarioController extends Controller
             return response()->json($validacion->errors()->first(), 400);
         }
 
-        $nombreUsuario = Usuario::where('Nombre', '=', $request->get('Nombre'))->get()->first();
+        $nombreUsuario = DB::table('usuario as u')
+            ->join('local as l', 'l.Codigo', '=', 'u.CodigoLocal')
+            ->join('empresa as e', 'e.Codigo', '=', 'l.CodigoEmpresa')
+            ->where('u.Nombre', '=', $request->get('Nombre'))
+            ->where('e.Codigo', '=', $request->get('empresa'))
+            ->get()
+            ->first();
         if (!$nombreUsuario) {
             $usuarioBuscar = Usuario::where('CodigoPersonal', '=', $request->get('CodigoPersonal'))->where('CodigoLocal', '=', $request->get('CodigoLocal'))->get()->first();
             if (!$usuarioBuscar) {
@@ -224,7 +230,14 @@ class UsuarioController extends Controller
                 return response()->json(array("msg" => "Contrase;a no coincide"), 501); //el msg de aqui no sirve por ahora 
             }
         }
-        $nombreBuscar = Usuario::where('Nombre', '=', $request->get('Nombre'))->where('Codigo', '!=', $id)->get()->first();
+        $nombreBuscar = DB::table('usuario as u')
+            ->join('local as l', 'l.Codigo', '=', 'u.CodigoLocal')
+            ->join('empresa as e', 'e.Codigo', '=', 'l.CodigoEmpresa')
+            ->where('u.Nombre', '=', $request->get('Nombre'))
+            ->where('e.Codigo', '=', $request->get('empresa'))
+            ->where('u.Codigo', '!=', $id)
+            ->get()
+            ->first();
         if (!$nombreBuscar) {
             $usuario = Usuario::findOrFail($id);
             $usuario->Nombre = $request->get('Nombre');
