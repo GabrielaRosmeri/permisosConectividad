@@ -167,7 +167,7 @@
         <v-card-text>
           <v-form ref="form" v-model="validD" lazy-validation>
             <v-row>
-              <v-col :cols="edit ? '12' : '6'">
+              <v-col cols="6">
                 <v-text-field
                   v-model="Nombre"
                   :rules="[fieldRules.required]"
@@ -189,6 +189,21 @@
                   :rules="[fieldRules.required]"
                   @change="mostrarPersonal"
                 ></v-select>
+              </v-col>
+              <v-col v-if="edit" cols="6">
+                <v-text-field
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                  v-model="ComprobarClave"
+                  :rules="[fieldRules.validarClave]"
+                  :error-messages="errors"
+                  label="Clave actual"
+                  placeholder="Ingresar clave actual"
+                  maxlength="10"
+                  prepend-icon="mdi-lock"
+                  @mouseup="limpiarError()"
+                  @click:append="show1 = !show1"
+                ></v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -251,25 +266,27 @@
                 <v-text-field
                   :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="show1 ? 'text' : 'password'"
-                  v-model="ComprobarClave"
+                  v-model="ClaveNueva"
                   :rules="[fieldRules.validarClave]"
-                  :error-messages="errors"
-                  label="Clave actual"
-                  placeholder="Ingresar clave actual"
+                  label="Clave nueva"
+                  placeholder="Ingresar nueva clave"
                   maxlength="10"
                   prepend-icon="mdi-lock"
-                  @mouseup="limpiarError()"
                   @click:append="show1 = !show1"
+                  required
                 ></v-text-field>
               </v-col>
               <v-col cols="6">
                 <v-text-field
                   :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="show1 ? 'text' : 'password'"
-                  v-model="ClaveNueva"
-                  :rules="[fieldRules.validarClave]"
-                  label="Clave nueva"
-                  placeholder="Ingresar nueva clave"
+                  v-model="ConfirmarClaveEditar"
+                  :rules="[
+                    fieldRules.required,
+                    fieldRules.validarClave,
+                    confirmarClaveEdit,
+                  ]"
+                  label="Confirmar clave"
                   maxlength="10"
                   prepend-icon="mdi-lock"
                   @click:append="show1 = !show1"
@@ -489,6 +506,15 @@ export default {
     },
     confirmarClave(value) {
       if (value === this.Clave) {
+        this.confirmar = true;
+        return true;
+      } else {
+        this.confirmar = false;
+        return "Clave no coincide.";
+      }
+    },
+    confirmarClaveEdit(value) {
+      if (value === this.ClaveNueva) {
         this.confirmar = true;
         return true;
       } else {
