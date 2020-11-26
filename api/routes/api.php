@@ -60,9 +60,9 @@ Route::patch('categoria/{id}', [CategoriaController::class, 'cambiarVigencia'])-
 // *********************************************************
 
 //* CRUD DE PRODUCTO
-Route::get('productos', [ProductoController::class, 'listar'])->middleware('token');
+Route::post('productos', [ProductoController::class, 'listar'])->middleware('token');
 Route::get('producto/{id}', [ProductoController::class, 'leer'])->middleware('token');
-Route::post('productos', [ProductoController::class, 'registrar'])->middleware('token');
+Route::post('producto', [ProductoController::class, 'registrar'])->middleware('token');
 Route::put('producto/{id}', [ProductoController::class, 'actualizar'])->middleware('token');
 Route::patch('producto/{id}', [ProductoController::class, 'cambiarVigencia'])->middleware('token');
 Route::get('categoriaMostrar', [ProductoController::class, 'mostrarCategoria'])->middleware('token');

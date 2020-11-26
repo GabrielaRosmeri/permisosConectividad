@@ -78,14 +78,14 @@ class ProductoController extends Controller
         return response()->json($producto, 200);
     }
 
-    //FUNCION INICIO --> Uniendo 3 tablas (producto marca y categoria)
-    public function listar()
+    public function listar(Request $request)
     {
-        $sql = 'SELECT pr.Codigo, ca.Nombre as nombreCategoria, ma.Nombre as nombreMarca, pr.Nombre as nombreProducto , pr.Tipo as Tipo FROM producto as pr
-              INNER JOIN categoria as ca on ca.Codigo = pr.CodigoCategoria
-              INNER JOIN marca as ma on ma.Codigo = pr.CodigoMarca
-            ';
-        $producto = DB::select($sql);
+        $producto = DB::table('producto as p')
+            ->join('categoria as c', 'c.Codigo', '=', 'p.CodigoCategoria')
+            ->join('marca as m', 'm.Codigo', '=', 'p.CodigoMarca')
+            ->select('p.Codigo', 'c.Nombre as nombreCategoria', 'm.Nombre as nombreMarca', 'p.Nombre as nombreProducto', 'p.Tipo as Tipo')
+            ->where('c.CodigoEmpresa', '=', $request->get('empresa'))
+            ->get();
 
         return response()->json($producto, 200);
     }

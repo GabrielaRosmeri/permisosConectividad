@@ -15,9 +15,12 @@
     <v-dialog v-model="dialog" persistent scrollable max-width="60vw">
       <v-card>
         <v-card-title class="headline indigo darken-4">
-          <!-- <span v-if="edit" class="headline" style="color:white">Editar Producto</span>
-          <span v-else class="headline" style="color:white">Nuevo Producto</span> -->
-          <span class="headline" style="color: white">{{ formTitle }}</span>
+          <span v-if="edit" class="headline" style="color: white"
+            >Editar Producto</span
+          >
+          <span v-else class="headline" style="color: white"
+            >Nuevo Producto</span
+          >
         </v-card-title>
         <v-card-text>
           <v-form ref="form" v-model="valid" lazy-validation>
@@ -179,27 +182,19 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { get, post, put, patch } from "../api/api";
-//import { del, get, enviarConArchivos, patch } from "../api/api";
-//import { logos } from "../api/config";
 import Swal from "sweetalert2";
 
 export default {
-  // components: {
-  //   TablesMostrar: () => import("../components/TablesMostrar"),
-  // },
   data() {
     return {
       txtBuscar: "",
       edit: false,
-      //ver: false,
-      //alert: false,
       valid: true,
       saveLoading: false,
       dialog: false,
-      checkbox: false, //checkbox NEGOCIABLE
-      //selected:false,
-
+      checkbox: false,
       itemsTipo: [
         { value: "B", text: "Bien", name: "Bien" },
         { value: "S", text: "Servicio", name: "Servicio" },
@@ -313,9 +308,7 @@ export default {
     };
   },
   computed: {
-    formTitle() {
-      return this.indiceEditar === -1 ? "Nuevo Producto" : "Editar Producto";
-    },
+    ...mapState(["user"]),
   },
   methods: {
     // abrirModal() {
@@ -358,16 +351,6 @@ export default {
         Negociable: this.Negociable,
       };
     },
-    // executeEventClick() {
-    //   if (this.edit === false) {
-    //     this.registerProducto();
-    //   } else {
-    //     this.editProducto();
-    //   }
-    // },
-    // itemFilaColor: function (item) {
-    //     return item.Vigencia ? "black--text" : "red--text";
-    // },
     registrar() {
       if (this.valid == false) return;
       this.saveLoading = true;
@@ -386,8 +369,7 @@ export default {
           });
           this.refrescarProducto();
         })
-        .catch(() => {
-        });
+        .catch(() => {});
     },
 
     editar() {
@@ -409,8 +391,7 @@ export default {
           });
           this.refrescarProducto();
         })
-        .catch(() => {
-        });
+        .catch(() => {});
     },
 
     leer(producto) {
@@ -458,14 +439,17 @@ export default {
           this.saveLoading = false;
         });
     },
-
+    assembleEmpresa() {
+      return {
+        empresa: this.empresa,
+      };
+    },
     refrescarProducto() {
-      get("productos").then((data) => {
+      post("productos", this.assembleEmpresa()).then((data) => {
         this.producto = data;
         this.listaproductos = data;
       });
     },
-
     itemFilaColor: function (item) {
       return item.Vigencia ? "black--text" : "red--text";
     },
@@ -495,10 +479,7 @@ export default {
   },
 
   created() {
-    // this.actualizarProductos();
-    //this.mostrarCategoria();
-    //this.mostrarMarca();
-    //this.datosProducto();
+    this.empresa = this.user.empresaId;
     this.refrescarProducto();
   },
 };
