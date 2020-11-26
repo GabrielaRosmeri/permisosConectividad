@@ -153,7 +153,20 @@ class UsuarioController extends Controller
 
     public function leer($id)
     {
-        return Usuario::find($id);
+        $usuario = DB::table('usuario as u')
+            ->join('personal as p', 'p.Codigo', '=', 'u.CodigoPersonal')
+            ->join('local as l', 'l.Codigo', '=', 'u.CodigoLocal')
+            ->join('perfil as pf', 'pf.Codigo', '=', 'u.CodigoPerfil')
+            ->select(
+                'u.Nombre as Nombre',
+                DB::raw('CONCAT(p.Nombres ,"  ", p.ApellidoPaterno ,"  ", p.ApellidoMaterno) as Personal'),
+                'l.Nombre as Local',
+                'pf.Nombre as Perfil'
+            )
+            ->where('u.Codigo', '=', $id)
+            ->get()
+            ->first();
+        return response()->json($usuario, 200);
     }
 
     public function registrar(Request $request)

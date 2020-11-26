@@ -166,6 +166,45 @@
         <v-divider></v-divider>
         <v-card-text>
           <v-form ref="form" v-model="validD" lazy-validation>
+            <v-row
+              class="mt-5 rounded"
+              v-if="edit"
+              style="border: 1px solid #1a237e !important"
+              outlined
+            >
+              <v-col cols="12">
+                <h4 class="pl-3" style="color: #1a237e !important">
+                  Datos del Usuario
+                </h4>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="datoPersonal"
+                  label="Personal"
+                  prepend-icon="mdi-account"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="datoLocal"
+                  label="Local"
+                  prepend-icon="mdi-home"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="datoPerfil"
+                  label="Perfil"
+                  prepend-icon="mdi-tag"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
             <v-row>
               <v-col cols="6">
                 <v-text-field
@@ -287,6 +326,7 @@
                     confirmarClaveEdit,
                   ]"
                   label="Confirmar clave"
+                  placeholder="Confirmar nueva clave"
                   maxlength="10"
                   prepend-icon="mdi-lock"
                   @click:append="show1 = !show1"
@@ -737,11 +777,10 @@ export default {
     },
     async mostrarUsuario(codigo) {
       const usuario = await get("usuarios/" + codigo);
-      this.CodigoPersonal = usuario.CodigoPersonal;
-      this.CodigoPerfil = usuario.CodigoPerfil;
       this.Nombre = usuario.Nombre;
-      this.Clave = usuario.Clave;
-      this.CodigoLocal = usuario.CodigoLocal;
+      this.datoPersonal = usuario.Personal;
+      this.datoLocal = usuario.Local;
+      this.datoPerfil = usuario.Perfil;
     },
   },
   created() {
