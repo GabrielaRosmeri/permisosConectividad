@@ -4,25 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Models\Local;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class LocalController extends Controller
 {
     public function registrar(REQUEST $resquest)
     {
-        $Local = new Local();
-        $Local->Nombre = $resquest->Nombre;
-        $Local->CodigoEmpresa = $resquest->CodigoEmpresa;
-        $Local->Direccion = $resquest->Direccion;
-        $Local->Telefono = $resquest->Telefono;
-        $Local->Vigencia = 1;
-        $Local->save();
-        $dato = [
-            "Registro" => "EXITOSO"
-        ];
-        return response()->json($dato, 200);
+        $validacion = Validator::make($resquest->all(), [
+            'Nombre' => 'required|max:100',
+            'Direccion' => 'required|max:255',
+            'Telefono' => 'required|max:9',
+        ], [
+            'required' => ':attribute es obligatorio',
+            'max' => ':attribute llego al limite de letras'
+        ]);
+
+        if ($validacion->fails()) {
+            return response()->json($validacion->errors()->first(), 400);
+        }
+        $buscarNombre = Local::where('Nombre', '=', $resquest->Nombre)->get()->first();
+        if (!$buscarNombre) {
+            $Local = new Local();
+            $Local->Nombre = $resquest->Nombre;
+            $Local->CodigoEmpresa = $resquest->CodigoEmpresa;
+            $Local->Direccion = $resquest->Direccion;
+            $Local->Telefono = $resquest->Telefono;
+            $Local->Vigencia = 1;
+            $Local->save();
+        } else {
+            return response()->json(array("msg" => "Local ya existe."), 404); //el msg de aqui no sirve por ahora 
+        }
+        return response()->json($Local, 200);
     }
     public function actualizar(REQUEST $resquest, $Codigo)
     {
+        $validacion = Validator::make($resquest->all(), [
+            'Nombre' => 'required|max:100',
+            'Direccion' => 'required|max:255',
+            'Telefono' => 'required|max:9',
+        ], [
+            'required' => ':attribute es obligatorio',
+            'max' => ':attribute llego al limite de letras'
+        ]);
+
+        if ($validacion->fails()) {
+            return response()->json($validacion->errors()->first(), 400);
+        }
+
         $Local = Local::find($Codigo);
         if ($Local != null) {
             $Local->Nombre = $resquest->Nombre;

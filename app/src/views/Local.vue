@@ -93,16 +93,17 @@
             <v-row>
               <v-col cols="6">
                 <v-text-field
-                  :disabled="ver"
                   v-model="Nombre"
                   label="Nombre"
                   prepend-icon="mdi-store"
+                  maxlength="100"
+                  :error-messages="errorsL"
+                  @mouseup="limpiarError()"
                   required
                 ></v-text-field>
               </v-col>
               <v-col cols="6">
                 <v-text-field
-                  :disabled="ver"
                   v-model="Telefono"
                   label="Teléfono"
                   type="number"
@@ -113,10 +114,10 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  :disabled="ver"
                   v-model="Direccion"
                   label="Dirección Local"
                   prepend-icon="mdi-map-marker"
+                  maxlength="255"
                   required
                 ></v-text-field>
               </v-col>
@@ -208,6 +209,7 @@ export default {
         },
       ],
       locales: [],
+      errorsL: [],
       search: "",
       Codigo: "",
       Nombre: "",
@@ -228,6 +230,9 @@ export default {
       this.Direccion = "";
       this.Telefono = "";
       this.ver = false;
+    },
+    limpiarError() {
+      this.errorL = [];
     },
     executeEventClick() {
       if (this.edit === false) {
@@ -251,19 +256,26 @@ export default {
     registerLocal() {
       if (this.valid == false) return;
       this.saveLoading = true;
-      post("local", this.assembleLocal()).then(() => {
-        this.saveLoading = false;
-        this.dialogEjemplo = false;
-        this.limpiar();
-        Swal.fire({
-          title: "Sistema",
-          text: "Local registrado exitosamente.",
-          icon: "success",
-          confirmButtonText: "Aceptar",
-          timer: 2500,
+      post("local", this.assembleLocal())
+        .then(() => {
+          this.saveLoading = false;
+          this.dialogEjemplo = false;
+          this.limpiar();
+          Swal.fire({
+            title: "Sistema",
+            text: "Local registrado exitosamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+            timer: 2500,
+          });
+          this.actualizarLocales();
+        })
+        .catch((e) => {
+          if (e.message == 404) {
+            this.errorsL = ["Local ya existe"];
+          }
+          this.saveLoading = false;
         });
-        this.actualizarLocales();
-      });
     },
     actualizar() {
       if (this.valid == false) return;
