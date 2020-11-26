@@ -235,6 +235,7 @@ export default {
       this.Nombre = "";
       this.Direccion = "";
       this.Telefono = "";
+      this.errorsL = [];
       this.$refs.form.resetValidation();
     },
     limpiarError() {

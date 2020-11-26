@@ -222,6 +222,7 @@ export default {
       this.CodigoEmpresa = "";
       this.Nombre = "";
       this.Descripcion = "";
+      this.errorsC = [];
     },
     limpiarError() {
       this.errorsC = [];

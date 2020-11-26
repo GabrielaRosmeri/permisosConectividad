@@ -602,6 +602,8 @@ export default {
       this.nuevaClave = "";
       this.confirmarNuevaClave = "";
       this.ConfirmarClaveEditar = "";
+      this.errors = [];
+      this.errorsU = [];
       this.$refs.form.resetValidation();
     },
     limpiarError() {
