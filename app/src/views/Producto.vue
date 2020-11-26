@@ -164,16 +164,16 @@
                 v-bind="attrs"
                 v-on="on"
                 class="mr-2"
-                :color="item.Vigencia ? 'red lighten-1' : 'green'"
+                :color="item.Vigencia ? 'green' : 'red lighten-1'"
                 @click="cambiarVigencia(item)"
                 >{{
                   item.Vigencia
-                    ? "mdi-close-circle-outline"
-                    : "mdi-checkbox-marked-circle-outline"
+                    ? "mdi-checkbox-marked-circle-outline"
+                    : "mdi-close-circle-outline"
                 }}</v-icon
               >
             </template>
-            <span>{{ item.Vigencia ? "Dar de baja" : "Dar de alta" }}</span>
+            <span>{{ item.Vigencia ? "Dar de alta" : "Dar de baja" }}</span>
           </v-tooltip>
         </template>
       </v-data-table>
@@ -311,18 +311,9 @@ export default {
     ...mapState(["user"]),
   },
   methods: {
-    // abrirModal() {
-    // this.limpiar();
-    // this.dialog = true;
     validate() {
       this.$refs.form.validate();
     },
-    // reset () {
-    //     this.$refs.form.reset()
-    // },
-    // validate() {
-    //   this.$refs.form.validate();
-    // },
     limpiar() {
       this.CodigoCategoria = "";
       this.CodigoMarca = "";
