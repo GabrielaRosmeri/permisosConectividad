@@ -133,6 +133,16 @@ const routes = [
     },
   },
   {
+    path: "/producto",
+    name: "Producto",
+    component: () => import("../views/Producto.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+  },
+  {
     path: "/pagosDiferidos",
     name: "Pagos Diferidos",
     component: () => import("../views/Local.vue"),

@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\LocalController;
 use App\Http\Controllers\PermisoUsuarioController;
+use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -57,3 +58,13 @@ Route::post('categoria', [CategoriaController::class, 'registrar'])->middleware(
 Route::put('categorias/{id}', [CategoriaController::class, 'actualizar'])->middleware('token');
 Route::patch('categoria/{id}', [CategoriaController::class, 'cambiarVigencia'])->middleware('token');
 // *********************************************************
+
+//* CRUD DE PRODUCTO
+Route::get('productos', [ProductoController::class, 'listar'])->middleware('token');
+Route::get('producto/{id}', [ProductoController::class, 'leer'])->middleware('token');
+Route::post('productos', [ProductoController::class, 'registrar'])->middleware('token');
+Route::put('producto/{id}', [ProductoController::class, 'actualizar'])->middleware('token');
+Route::patch('producto/{id}', [ProductoController::class, 'cambiarVigencia'])->middleware('token');
+Route::get('categoriaMostrar', [ProductoController::class, 'mostrarCategoria'])->middleware('token');
+Route::get('marcaMostrar', [ProductoController::class, 'mostrarMarca'])->middleware('token');
+//* *********************************************************
