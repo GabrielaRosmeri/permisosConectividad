@@ -107,8 +107,8 @@
                   v-model="Telefono"
                   label="Teléfono"
                   type="number"
-                  maxlength="9"
                   prepend-icon="mdi-phone"
+                  :rules="[fieldRules.numeroV]"
                   required
                 ></v-text-field>
               </v-col>
@@ -162,6 +162,9 @@ export default {
       saveLoading: false,
       dialogEjemplo: false,
       itemsEmpresa: [],
+      fieldRules: {
+        numeroV: (v) => v.length === 9 || "Numero invalido",
+      },
       headers: [
         {
           text: "Nº",
@@ -224,12 +227,15 @@ export default {
     validate() {
       this.$refs.form.validate();
     },
+    limpiarValidate() {
+      this.$refs.form.resetValidation();
+    },
     limpiar() {
       this.codigo = "";
       this.Nombre = "";
       this.Direccion = "";
       this.Telefono = "";
-      this.ver = false;
+      this.$refs.form.resetValidation();
     },
     limpiarError() {
       this.errorsL = [];
