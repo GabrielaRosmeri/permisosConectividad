@@ -166,7 +166,7 @@ export default {
           text: "Nº",
           value: "index",
           width: "10%",
-          class: "light  darken-4 black--text",
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Nombre",
@@ -174,25 +174,25 @@ export default {
           // sortable: false,
           value: "Nombre",
           width: "25%",
-          class: "light darken-4 black--text",
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Dirección",
           value: "Direccion",
           width: "30%",
-          class: "light  darken-4 black--text",
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Teléfono",
           value: "Telefono",
           width: "20%",
-          class: "light  darken-4 black--text",
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Acciones",
           value: "actions",
           width: "15%",
-          class: "light  darken-4 black--text",
+          class: "indigo darken-4 white--text",
         },
       ],
       options: [

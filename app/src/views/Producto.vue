@@ -247,6 +247,7 @@ export default {
           value: "index",
           width: "10%",
           sortable: false,
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Nombre Producto",
@@ -254,30 +255,35 @@ export default {
           value: "nombreProducto",
           width: "20%",
           sortable: false,
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Categoria",
           value: "nombreCategoria",
           width: "20%",
           sortable: false,
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Marca",
           value: "nombreMarca",
           width: "20%",
           sortable: false,
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Tipo",
           value: "Tipo",
           width: "20%",
           sortable: false,
+          class: "indigo darken-4 white--text",
         }, //INCOMPLETO
         {
           text: "Acciones",
           value: "actions",
           width: "20%",
           sortable: false,
+          class: "indigo darken-4 white--text",
         },
       ],
       options: [
