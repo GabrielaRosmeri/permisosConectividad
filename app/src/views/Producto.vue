@@ -1,15 +1,22 @@
 <template>
-  <v-container style="padding: 0px">
-    <v-row class="pa-5 align-center">
-      <v-col>
-        <v-btn fab large dark color="blue" @click="dialog = true">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </v-col>
-      <v-col cols="11">
+  <v-content>
+    <v-row class="pa-2" align="center">
+      <v-col cols="12">
         <h2 class="font-weight-regular text-center">
-          Mantenimiento de Producto
+          Mantenimiento de Productos
         </h2>
+      </v-col>
+    </v-row>
+    <v-row align="center">
+      <v-col cols="11" align="end">
+        <v-btn
+          color="indigo darken-4 white--text"
+          elevation="5"
+          @click="dialog = true"
+        >
+          <v-icon>mdi-plus</v-icon>
+          Producto
+        </v-btn>
       </v-col>
     </v-row>
     <v-dialog v-model="dialog" persistent scrollable max-width="60vw">
@@ -109,76 +116,79 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-card>
-      <v-card-title>
-        <v-spacer></v-spacer>
-        <v-row>
-          <v-col cols="3">
-            <v-combobox
-              v-model="bopcion"
-              :rules="[fieldRules.valicbo]"
-              :items="listaOpciones"
-              label="Opciones"
-              prepend-icon="mdi-view-headline"
-            ></v-combobox>
-          </v-col>
-          <v-col cols="6">
-            <v-text-field
-              v-model="txtBuscar"
-              append-icon="mdi-magnify"
-              :rules="[fieldRules.verBuscar]"
-              label="Buscar"
-              single-line
-              hide-details
-              @keyup.enter="fn_buscarProducto"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-      </v-card-title>
-      <!--<v-col cols="12" class="pt-0">  NO SÉ POR QUE XD -->
-      <v-data-table
-        :headers="headers"
-        :items="producto"
-        :item-class="itemFilaColor"
-      >
-        <template v-slot:[`item.index`]="{ item }">
-          {{ producto.indexOf(item) + 1 }}
-        </template>
-        <template v-slot:[`item.actions`]="{ item }">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon
-                v-bind="attrs"
-                v-on="on"
-                class="mr-2"
-                color="blue-grey"
-                @click="leer(item)"
-                >mdi-border-color
-              </v-icon>
+    <v-col class="pa-1" align="center">
+      <v-col cols="10" align="center">
+        <v-card style="border-top: 5px solid #1a237e !important">
+          <v-card-title>
+            <v-spacer></v-spacer>
+            <v-row>
+              <v-col cols="3">
+                <v-combobox
+                  v-model="bopcion"
+                  :rules="[fieldRules.valicbo]"
+                  :items="listaOpciones"
+                  label="Opciones"
+                  prepend-icon="mdi-view-headline"
+                ></v-combobox>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  v-model="txtBuscar"
+                  append-icon="mdi-magnify"
+                  :rules="[fieldRules.verBuscar]"
+                  label="Buscar"
+                  single-line
+                  hide-details
+                  @keyup.enter="fn_buscarProducto"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <v-data-table
+            :headers="headers"
+            :items="producto"
+            :item-class="itemFilaColor"
+          >
+            <template v-slot:[`item.index`]="{ item }">
+              {{ producto.indexOf(item) + 1 }}
             </template>
-            <span>Editar</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon
-                v-bind="attrs"
-                v-on="on"
-                class="mr-2"
-                :color="item.Vigencia ? 'green' : 'red lighten-1'"
-                @click="cambiarVigencia(item)"
-                >{{
-                  item.Vigencia
-                    ? "mdi-checkbox-marked-circle-outline"
-                    : "mdi-close-circle-outline"
-                }}</v-icon
-              >
+            <template v-slot:[`item.actions`]="{ item }">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    v-bind="attrs"
+                    v-on="on"
+                    class="mr-2"
+                    color="blue-grey"
+                    @click="leer(item)"
+                    >mdi-border-color
+                  </v-icon>
+                </template>
+                <span>Editar</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    v-bind="attrs"
+                    v-on="on"
+                    class="mr-2"
+                    :color="item.Vigencia ? 'green' : 'red lighten-1'"
+                    @click="cambiarVigencia(item)"
+                    >{{
+                      item.Vigencia
+                        ? "mdi-checkbox-marked-circle-outline"
+                        : "mdi-close-circle-outline"
+                    }}</v-icon
+                  >
+                </template>
+                <span>{{ item.Vigencia ? "Dar de alta" : "Dar de baja" }}</span>
+              </v-tooltip>
             </template>
-            <span>{{ item.Vigencia ? "Dar de alta" : "Dar de baja" }}</span>
-          </v-tooltip>
-        </template>
-      </v-data-table>
-    </v-card>
-  </v-container>
+          </v-data-table>
+        </v-card>
+      </v-col>
+    </v-col>
+  </v-content>
 </template>
 
 <script>
@@ -233,7 +243,6 @@ export default {
           text: "N°",
           value: "index",
           width: "10%",
-          class: "light blue darken-4 white--text",
           sortable: false,
         },
         {
@@ -241,35 +250,30 @@ export default {
           align: "start",
           value: "nombreProducto",
           width: "20%",
-          class: "light blue darken-4 white--text",
           sortable: false,
         },
         {
           text: "Categoria",
           value: "nombreCategoria",
           width: "20%",
-          class: "light blue darken-4 white--text",
           sortable: false,
         },
         {
           text: "Marca",
           value: "nombreMarca",
           width: "20%",
-          class: "light blue darken-4 white--text",
           sortable: false,
         },
         {
           text: "Tipo",
           value: "Tipo",
-          width: "30%",
-          class: "light blue darken-4 white--text",
+          width: "20%",
           sortable: false,
         }, //INCOMPLETO
         {
           text: "Acciones",
           value: "actions",
           width: "20%",
-          class: "light blue darken-4 white--text",
           sortable: false,
         },
       ],
