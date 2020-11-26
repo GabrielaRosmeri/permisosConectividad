@@ -328,13 +328,11 @@ export default {
       this.Tipo = "";
       this.Nombre = "";
       this.TipoControl = "";
-      //this.ver = false;
       this.edit = false;
-      this.indiceEditar = -1;
       this.$refs.form.resetValidation();
     },
     guardar() {
-      if (this.indiceEditar === -1) {
+      if (this.edit === false) {
         this.registrar();
       } else {
         this.editar();
@@ -353,7 +351,7 @@ export default {
     registrar() {
       if (this.valid == false) return;
       this.saveLoading = true;
-      post("productos", this.getProducto())
+      post("producto", this.getProducto())
         .then(() => {
           this.saveLoading = false;
           this.dialog = false;
@@ -366,7 +364,6 @@ export default {
             confirmButtonText: "OK",
             timer: 2500,
           });
-          this.refrescarProducto();
         })
         .catch(() => {});
     },
@@ -396,6 +393,7 @@ export default {
     leer(producto) {
       this.indiceEditar = producto.Codigo;
       this.codigoEditar = producto.Codigo;
+      this.edit = true;
       this.mostrarProducto(producto.Codigo).then(() => {
         this.dialog = true;
       });
