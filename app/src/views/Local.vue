@@ -254,7 +254,6 @@ export default {
       post("local", this.assembleLocal()).then(() => {
         this.saveLoading = false;
         this.dialogEjemplo = false;
-        //this.$refs.localTable.fetchData();
         this.limpiar();
         Swal.fire({
           title: "Sistema",

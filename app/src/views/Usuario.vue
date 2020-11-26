@@ -530,7 +530,6 @@ export default {
       if (this.valid == false) return;
       this.loading = true;
       post("usuariosLista", this.assembleUser()).then((data) => {
-        console.log(data.length);
         if (data.length === 0) {
           this.disabled = true;
         } else {

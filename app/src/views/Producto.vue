@@ -120,28 +120,52 @@
       <v-col cols="10" align="center">
         <v-card style="border-top: 5px solid #1a237e !important">
           <v-card-title>
-            <v-spacer></v-spacer>
-            <v-row>
-              <v-col cols="3">
-                <v-combobox
-                  v-model="bopcion"
-                  :rules="[fieldRules.valicbo]"
-                  :items="listaOpciones"
-                  label="Opciones"
-                  prepend-icon="mdi-view-headline"
-                ></v-combobox>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="txtBuscar"
-                  append-icon="mdi-magnify"
-                  :rules="[fieldRules.verBuscar]"
-                  label="Buscar"
-                  single-line
-                  hide-details
-                  @keyup.enter="fn_buscarProducto"
-                ></v-text-field>
-              </v-col>
+            <v-row align="center" justify-center class="text-center pb-0 pl-10">
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <v-row align="center" justify-center class="text-center">
+                  <v-col
+                    class="justify-content-center text-center"
+                    align="center"
+                    cols="6"
+                  >
+                    <v-select
+                      v-model="bopcion"
+                      :rules="[fieldRules.required]"
+                      :items="listaOpciones"
+                      label="Opciones"
+                      class="pt-8"
+                    ></v-select>
+                  </v-col>
+                  <v-col
+                    class="justify-content-center text-center"
+                    align="center"
+                    cols="5"
+                  >
+                    <v-text-field
+                      v-model="txtBuscar"
+                      :rules="[fieldRules.required]"
+                      label="Buscar"
+                      single-line
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                    class="justify-content-center text-center"
+                    align="center"
+                    cols="1"
+                  >
+                    <v-btn
+                      icon
+                      color="indigo darken-4"
+                      class="pt-8"
+                      @mousedown="validate"
+                      @click="refrescarProducto"
+                    >
+                      <v-icon>mdi-magnify</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-form>
             </v-row>
           </v-card-title>
           <v-data-table
@@ -215,27 +239,6 @@ export default {
 
       fieldRules: {
         required: (v) => !!v || "Campo requerido",
-        verBuscar: (v) => {
-          if (v.length > 0) {
-            if (this.bopcion == "Nombre" || this.bopcion == "Codigo") {
-              //this.fn_buscarPersonal(v, this.bopcion)
-              return true;
-            } else {
-              this.bopcion = "Opciones";
-              return false;
-            }
-          } else {
-            return false;
-          }
-        },
-
-        valicbo: (v) => {
-          if (v == "Nombre" || v == "Codigo") {
-            return true;
-          } else {
-            return "seleccionar una opción";
-          }
-        },
       },
 
       headers: [
@@ -303,10 +306,11 @@ export default {
       Nombre: "",
       TipoControl: "",
       CodigoTipo: "",
-      indiceEditar: -1,
-      listaproducto01: [],
-      listaproductos: [],
-      listaOpciones: ["Nombre", "Codigo"],
+      listaOpciones: [
+        { text: "Nombre", value: "p.Nombre" },
+        { text: "Categoria", value: "c.Nombre" },
+        { text: "Marca", value: "m.Nombre" },
+      ],
       bopcion: "",
       valor: "",
     };
@@ -437,45 +441,25 @@ export default {
     assembleEmpresa() {
       return {
         empresa: this.empresa,
+        atributo: this.bopcion,
+        busqueda: this.txtBuscar,
       };
     },
     refrescarProducto() {
+      if (this.valid == false) return;
+      this.loading = true;
       post("productos", this.assembleEmpresa()).then((data) => {
         this.producto = data;
-        this.listaproductos = data;
+        this.loading = false;
       });
     },
     itemFilaColor: function (item) {
       return item.Vigencia ? "black--text" : "red--text";
     },
-
-    fn_buscarProducto() {
-      if (this.bopcion == "Nombre" || this.bopcion == "Codigo") {
-        if (this.txtBuscar != "") {
-          this.valor = this.txtBuscar;
-          if (this.bopcion == "Codigo") {
-            this.listaproducto01 = this.listaproductos.filter(
-              (x) => x.Codigo == this.valor
-            );
-            this.producto = this.listaproducto01;
-          } else {
-            let er = new RegExp("." + this.valor + "*");
-            console.log(er);
-            this.listaproducto01 = this.listaproductos.filter((x) =>
-              x.nombreProducto.match(er)
-            );
-            this.producto = this.listaproducto01;
-          }
-        } else {
-          this.refrescarProducto();
-        }
-      }
-    },
   },
 
   created() {
     this.empresa = this.user.empresaId;
-    this.refrescarProducto();
   },
 };
 </script>
