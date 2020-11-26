@@ -380,7 +380,45 @@
         <v-divider></v-divider>
         <v-card-text>
           <v-form ref="form" v-model="validR" lazy-validation>
-            <v-row>
+            <v-row
+              class="mt-5 rounded"
+              style="border: 1px solid #1a237e !important"
+              outlined
+            >
+              <v-col cols="12">
+                <h4 class="pl-3" style="color: #1a237e !important">
+                  Datos del Usuario
+                </h4>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="datoPersonal"
+                  label="Personal"
+                  prepend-icon="mdi-account"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="datoLocal"
+                  label="Local"
+                  prepend-icon="mdi-home"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="datoPerfil"
+                  label="Perfil"
+                  prepend-icon="mdi-tag"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+            <v-row class="pt-2">
               <v-col cols="6">
                 <v-text-field
                   :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -643,7 +681,9 @@ export default {
     },
     showReestablecer(usuario) {
       this.editId = usuario.Codigo;
-      this.dialogReestablecer = true;
+      this.mostrarUsuario(usuario.Codigo).then(() => {
+        this.dialogReestablecer = true;
+      });
     },
     assembleRegistrar() {
       return {
@@ -696,7 +736,6 @@ export default {
           this.saveLoading = false;
           this.editId = null;
           this.dialogEjemplo = false;
-          this.actualizarUsuarios();
           this.busquedaUsuario();
           Swal.fire({
             title: "Sistema",
@@ -737,7 +776,6 @@ export default {
               timer: 2500,
             });
           }
-          this.actualizarUsuarios();
           this.busquedaUsuario();
         })
         .catch(() => {
@@ -769,11 +807,6 @@ export default {
           });
         }
       );
-    },
-    actualizarUsuarios() {
-      get("usuarios").then((data) => {
-        this.usuarios = data;
-      });
     },
     async mostrarUsuario(codigo) {
       const usuario = await get("usuarios/" + codigo);
