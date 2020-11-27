@@ -303,4 +303,22 @@ class UsuarioController extends Controller
 
         return response()->json($datos, 200);
     }
+
+    public function actualizarDatosUsuario(Request $request, $id)
+    {
+        $usuario = Usuario::findOrFail($id);
+        $personal = Personal::findOrFail($usuario->CodigoPersonal);
+
+        $personal->Nombres = $request->get('Nombres');
+        $personal->ApellidoPaterno = $request->get('ApellidoPaterno');
+        $personal->ApellidoMaterno = $request->get('ApellidoMaterno');
+        $personal->Direccion = $request->get('Direccion');
+        $personal->Telefono = $request->get('Telefono');
+        $personal->Celular = $request->get('Celular');
+        $personal->Correo = $request->get('Correo');
+
+        $personal->save();
+
+        return response()->json($personal, 200);
+    }
 }

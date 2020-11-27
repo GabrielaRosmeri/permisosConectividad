@@ -44,6 +44,7 @@ Route::put('usuarios/{id}', [UsuarioController::class, 'actualizar'])->middlewar
 Route::patch('usuario/{id}', [UsuarioController::class, 'cambiarVigencia'])->middleware('token');
 Route::put('reestablecer/{id}', [UsuarioController::class, 'reestablecerContraseña'])->middleware('token');
 Route::post('usuarioDatos', [UsuarioController::class, 'datosUsuario'])->middleware('token');
+Route::put('actualizarDatos/{id}', [UsuarioController::class, 'actualizarDatosUsuario'])->middleware('token');
 
 //* CRUD DE LOCAL
 Route::post('local', [LocalController::class, 'registrar'])->middleware('token');

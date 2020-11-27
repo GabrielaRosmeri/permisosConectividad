@@ -23,6 +23,15 @@
                   <span v-if="!guardar">Editar</span>
                   <span v-else>Guardar</span>
                 </v-btn>
+                <v-btn
+                  v-if="guardar"
+                  color="indigo darken-4"
+                  text
+                  medium
+                  small
+                  @click="limpiar()"
+                  >Cancelar</v-btn
+                >
               </v-col>
             </v-row>
           </v-card-title>
@@ -31,87 +40,101 @@
             <v-container class="pt-3">
               <v-row align="center">
                 <v-col cols="4" align="center">
-                  <v-avatar color="indigo darken-1" size="70">
+                  <v-avatar color="teal" size="70">
                     <span class="white--text headline">{{ split }}</span>
                   </v-avatar>
-                  <h4 class="pl-3 pt-1">{{ cargo }}</h4>
-                  <h4 class="pl-3 pt-3">{{ correoEmpresarial }}</h4>
-                  <h4 class="pl-3 pt-3">{{ celularEmpresarial }}</h4>
+                  <h4 class="pl-3 pt-1">
+                    {{ cargo }}
+                  </h4>
+                  <h4 class="pl-3 pt-3" style="color: #64b5f6 !important">
+                    {{ correoEmpresarial }}
+                  </h4>
+                  <h4 class="pl-3 pt-3" style="color: #64b5f6 !important">
+                    {{ celularEmpresarial }}
+                  </h4>
                 </v-col>
                 <v-divider vertical></v-divider>
                 <v-col cols="7">
-                  <v-row class="d-flex" justify="center">
-                    <v-col cols="6">
-                      <v-text-field
-                        v-model="nombre"
-                        label="Nombre"
-                        :disabled="disabled"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="d-flex">
-                      <v-text-field
-                        v-model="apPaterno"
-                        label="Apellido Paterno"
-                        :disabled="disabled"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="d-flex">
-                      <v-text-field
-                        v-model="apMaterno"
-                        label="Apellido Materno"
-                        :disabled="disabled"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="d-flex">
-                      <v-text-field
-                        v-model="tipoD"
-                        label="Tipo Documento"
-                        disabled
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="d-flex">
-                      <v-text-field
-                        v-model="numeroD"
-                        label="Número Documento"
-                        disabled
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="d-flex">
-                      <v-text-field
-                        v-model="sistemaP"
-                        label="Sistema Pensiones"
-                        disabled
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="d-flex">
-                      <v-text-field
-                        v-model="direccion"
-                        label="Dirección"
-                        :disabled="disabled"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="d-flex">
-                      <v-text-field
-                        v-model="telefono"
-                        label="Teléfono"
-                        :disabled="disabled"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="d-flex">
-                      <v-text-field
-                        v-model="celular"
-                        label="Celular"
-                        :disabled="disabled"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="d-flex">
-                      <v-text-field
-                        v-model="correo"
-                        label="Correo"
-                        :disabled="disabled"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+                  <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-row class="d-flex" justify="center">
+                      <v-col cols="6">
+                        <v-text-field
+                          v-model="nombre"
+                          label="Nombre"
+                          :disabled="disabled"
+                          :rules="[fieldRules.required]"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6" class="d-flex">
+                        <v-text-field
+                          v-model="apPaterno"
+                          label="Apellido Paterno"
+                          :disabled="disabled"
+                          :rules="[fieldRules.required]"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6" class="d-flex">
+                        <v-text-field
+                          v-model="apMaterno"
+                          label="Apellido Materno"
+                          :disabled="disabled"
+                          :rules="[fieldRules.required]"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6" class="d-flex">
+                        <v-text-field
+                          v-model="tipoD"
+                          label="Tipo Documento"
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6" class="d-flex">
+                        <v-text-field
+                          v-model="numeroD"
+                          label="Número Documento"
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6" class="d-flex">
+                        <v-text-field
+                          v-model="sistemaP"
+                          label="Sistema Pensiones"
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6" class="d-flex">
+                        <v-text-field
+                          v-model="direccion"
+                          label="Dirección"
+                          :disabled="disabled"
+                          :rules="[fieldRules.required]"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6" class="d-flex">
+                        <v-text-field
+                          v-model="telefono"
+                          label="Teléfono"
+                          :disabled="disabled"
+                          :rules="[fieldRules.required]"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6" class="d-flex">
+                        <v-text-field
+                          v-model="celular"
+                          label="Celular"
+                          :disabled="disabled"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6" class="d-flex">
+                        <v-text-field
+                          v-model="correo"
+                          label="Correo"
+                          :disabled="disabled"
+                          :rules="[fieldRules.required]"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-form>
                 </v-col>
               </v-row>
             </v-container>
@@ -124,7 +147,8 @@
 
 <script>
 import { mapState } from "vuex";
-import { post } from "../api/api";
+import { post, put } from "../api/api";
+import Swal from "sweetalert2";
 export default {
   data: () => ({
     usurioI: "",
@@ -132,13 +156,39 @@ export default {
     correoEmpresarial: "",
     celularEmpresarial: "",
     cargo: "",
+    nombre: "",
+    apPaterno: "",
+    apMaterno: "",
+    numeroD: "",
+    direccion: "",
+    telefono: "",
+    correo: "",
+    celular: "",
+    tipoD: "",
+    sistemaP: "",
     guardar: false,
     disabled: true,
+    valid: true,
+    fieldRules: {
+      required: (v) => !!v || "Campo requerido",
+    },
   }),
   computed: {
     ...mapState(["user"]),
   },
   methods: {
+    validate() {
+      this.$refs.form.validate();
+    },
+    limpiarValidate() {
+      this.$refs.form.resetValidation();
+    },
+    limpiar() {
+      this.disabled = true;
+      this.guardar = false;
+      this.limpiarValidate();
+      this.datosUsuario();
+    },
     assembleUsuarioLocal() {
       return {
         usuario: this.idUsuario,
@@ -150,8 +200,7 @@ export default {
         this.disabled = false;
         this.guardar = true;
       } else {
-        this.disabled = true;
-        this.guardar = false;
+        this.editDatos();
       }
     },
     datosUsuario() {
@@ -169,6 +218,30 @@ export default {
         this.celular = data.Celular;
         this.tipoD = data.Documento;
         this.sistemaP = data.Siglas;
+      });
+    },
+    assembleEdit() {
+      return {
+        Nombres: this.nombre,
+        ApellidoPaterno: this.apPaterno,
+        ApellidoMaterno: this.apMaterno,
+        Direccion: this.direccion,
+        Telefono: this.telefono,
+        Celular: this.celular,
+        Correo: this.correo,
+      };
+    },
+    editDatos() {
+      if (this.valid == false) return;
+      put("actualizarDatos/" + this.idUsuario, this.assembleEdit()).then(() => {
+        Swal.fire({
+          title: "Sistema",
+          text: "Datos personales actualizados correctamente.",
+          icon: "success",
+          confirmButtonText: "OK",
+          timer: 2500,
+        });
+        this.limpiar();
       });
     },
   },
