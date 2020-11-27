@@ -270,4 +270,37 @@ class UsuarioController extends Controller
 
         return response()->json($usuario, 200);
     }
+
+    public function datosUsuario(Request $request)
+    {
+        $usuario = $request->get('usuario');
+        $local = $request->get('local');
+
+        $datos = DB::table('usuario as u')
+            ->join('personal as p', 'p.Codigo', '=', 'u.CodigoPersonal')
+            ->join('localpersonal as lp', 'lp.CodigoPersonal', '=', 'p.Codigo')
+            ->join('documentopersona as dp', 'dp.Codigo', '=', 'p.CodigoDocumentoPersona')
+            ->join('sistemapensiones as sp', 'sp.Codigo', '=', 'p.CodigoSistemaPensiones')
+            ->select(
+                'lp.Cargo',
+                'lp.CorreoEmpresarial',
+                'lp.CelularEmpresarial',
+                'p.Nombres',
+                'p.ApellidoPaterno',
+                'p.ApellidoMaterno',
+                'p.NumeroDocumento',
+                'p.Direccion',
+                'p.Telefono',
+                'p.Correo',
+                'p.Celular',
+                'dp.Nombre as Documento',
+                'sp.Siglas'
+            )
+            ->where('u.Codigo', '=', $usuario)
+            ->where('lp.CodigoLocal', '=', $local)
+            ->get()
+            ->first();
+
+        return response()->json($datos, 200);
+    }
 }
