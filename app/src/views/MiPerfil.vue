@@ -40,21 +40,23 @@
             <v-container class="pt-3">
               <v-row align="center">
                 <v-col cols="4" align="center">
-                  <v-avatar color="teal" size="70">
+                  <v-avatar color="lime" size="70">
                     <span class="white--text headline">{{ split }}</span>
                   </v-avatar>
                   <h4 class="pl-3 pt-1">
                     {{ cargo }}
                   </h4>
-                  <h4 class="pl-3 pt-3" style="color: #64b5f6 !important">
+                  <h4 class="pl-3 pt-3" style="color: #1a237e !important">
                     {{ correoEmpresarial }}
                   </h4>
-                  <h4 class="pl-3 pt-3" style="color: #64b5f6 !important">
+                  <h4 class="pl-3 pt-3" style="color: #1a237e !important">
                     {{ celularEmpresarial }}
                   </h4>
                 </v-col>
-                <v-divider vertical></v-divider>
-                <v-col cols="7">
+                <v-col
+                  cols="8"
+                  style="border-left: 5px solid #1a237e !important"
+                >
                   <v-form ref="form" v-model="valid" lazy-validation>
                     <v-row class="d-flex" justify="center">
                       <v-col cols="6">
@@ -63,6 +65,7 @@
                           label="Nombre"
                           :disabled="disabled"
                           :rules="[fieldRules.required]"
+                          prepend-icon="mdi-account"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" class="d-flex">
@@ -71,6 +74,7 @@
                           label="Apellido Paterno"
                           :disabled="disabled"
                           :rules="[fieldRules.required]"
+                          prepend-icon="mdi-account"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" class="d-flex">
@@ -79,6 +83,7 @@
                           label="Apellido Materno"
                           :disabled="disabled"
                           :rules="[fieldRules.required]"
+                          prepend-icon="mdi-account"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" class="d-flex">
@@ -86,6 +91,7 @@
                           v-model="tipoD"
                           label="Tipo Documento"
                           disabled
+                          prepend-icon="mdi-account-card-details"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" class="d-flex">
@@ -93,6 +99,7 @@
                           v-model="numeroD"
                           label="Número Documento"
                           disabled
+                          prepend-icon="mdi-account-card-details"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" class="d-flex">
@@ -108,6 +115,7 @@
                           label="Dirección"
                           :disabled="disabled"
                           :rules="[fieldRules.required]"
+                          prepend-icon="mdi-map-marker-outline"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" class="d-flex">
@@ -116,6 +124,7 @@
                           label="Teléfono"
                           :disabled="disabled"
                           :rules="[fieldRules.required]"
+                          prepend-icon="mdi-phone"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" class="d-flex">
@@ -123,6 +132,7 @@
                           v-model="celular"
                           label="Celular"
                           :disabled="disabled"
+                          prepend-icon="mdi-cellphone"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" class="d-flex">
@@ -130,7 +140,8 @@
                           v-model="correo"
                           label="Correo"
                           :disabled="disabled"
-                          :rules="[fieldRules.required]"
+                          :rules="[fieldRules.required, fieldRules.email]"
+                          prepend-icon="mdi-email"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -171,6 +182,10 @@ export default {
     valid: true,
     fieldRules: {
       required: (v) => !!v || "Campo requerido",
+      email: (v) => {
+        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return pattern.test(v) || "Correo electrónico incorrecto.";
+      },
     },
   }),
   computed: {
