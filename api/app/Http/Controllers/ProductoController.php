@@ -39,6 +39,7 @@ class ProductoController extends Controller
         $producto->Tipo = $request->get('Tipo');
         $producto->Nombre = $request->get('Nombre');
         $producto->TipoControl = $request->get('TipoControl');
+        $producto->Negociable = $request->get('Negociable');
         $producto->save();
 
         return response()->json($producto, 201);

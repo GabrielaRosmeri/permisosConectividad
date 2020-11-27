@@ -348,6 +348,7 @@ export default {
       this.Tipo = "";
       this.Nombre = "";
       this.TipoControl = "";
+      this.checkbox = false;
       this.edit = false;
       this.$refs.form.resetValidation();
     },
@@ -370,7 +371,7 @@ export default {
         CodigoMarca: this.CodigoMarca,
         Tipo: this.Tipo,
         TipoControl: this.TipoControl,
-        Negociable: this.Negociable,
+        Negociable: this.checkbox,
       };
     },
     registrar() {
@@ -444,7 +445,7 @@ export default {
       this.Tipo = producto.Tipo;
       this.Nombre = producto.Nombre;
       this.TipoControl = producto.TipoControl;
-      //this.Negociable = producto.Negociable;
+      this.checkbox = producto.Negociable;
     },
     cambiarVigencia(producto) {
       patch("producto/" + producto.Codigo)
