@@ -65,6 +65,6 @@ Route::get('producto/{id}', [ProductoController::class, 'leer'])->middleware('to
 Route::post('producto', [ProductoController::class, 'registrar'])->middleware('token');
 Route::put('producto/{id}', [ProductoController::class, 'actualizar'])->middleware('token');
 Route::patch('producto/{id}', [ProductoController::class, 'cambiarVigencia'])->middleware('token');
-Route::get('categoriaMostrar', [ProductoController::class, 'mostrarCategoria'])->middleware('token');
-Route::get('marcaMostrar', [ProductoController::class, 'mostrarMarca'])->middleware('token');
+Route::get('productocategoria', [ProductoController::class, 'mostrarCategoria'])->middleware('token');
+Route::get('productomarca', [ProductoController::class, 'mostrarMarca'])->middleware('token');
 //* *********************************************************

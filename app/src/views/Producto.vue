@@ -12,7 +12,7 @@
         <v-btn
           color="indigo darken-4 white--text"
           elevation="5"
-          @click="dialog = true"
+          @click="abrirDialog()"
         >
           <v-icon>mdi-plus</v-icon>
           Producto
@@ -33,24 +33,24 @@
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-row>
               <v-col cols="6">
-                <v-text-field
+                <v-select
+                  :items="optionsCategoria"
                   v-model="CodigoCategoria"
+                  label="Código Categoria"
+                  prepend-icon="mdi-tag"
+                  dense
                   :rules="[fieldRules.required]"
-                  label="Código Categoria *"
-                  hint="*Campo requerido"
-                  prepend-icon="mdi-domain"
-                  required
-                ></v-text-field>
+                ></v-select>
               </v-col>
               <v-col cols="6">
-                <v-text-field
+                <v-select
+                  :items="optionsMarca"
                   v-model="CodigoMarca"
+                  label="Código Marca"
+                  prepend-icon="mdi-tag"
+                  dense
                   :rules="[fieldRules.required]"
-                  label="Código Marca *"
-                  hint="*Campo requerido"
-                  prepend-icon="mdi-domain"
-                  required
-                ></v-text-field>
+                ></v-select>
               </v-col>
             </v-row>
 
@@ -85,10 +85,7 @@
                 ></v-select>
               </v-col>
               <!------------------------------------------------------------------------- - -->
-              <v-checkbox
-                v-model="checkbox"
-                :label="`Negociable: ${checkbox.toString()}`"
-              ></v-checkbox>
+              <!------------------------------------------------------------------------- v-model="checkbox" :label="`Negociable`"></!------------------------------------------------------------------------->
               <!------------------------------------------------------------------------- - -->
             </v-row>
           </v-form>
@@ -229,6 +226,8 @@ export default {
       saveLoading: false,
       dialog: false,
       checkbox: false,
+      optionsCategoria: [],
+      optionsMarca: [],
       itemsTipo: [
         { value: "B", text: "Bien", name: "Bien" },
         { value: "S", text: "Servicio", name: "Servicio" },
@@ -337,6 +336,11 @@ export default {
       this.edit = false;
       this.$refs.form.resetValidation();
     },
+    abrirDialog() {
+      this.dialog = true;
+      this.mostrarCategoria();
+      this.mostrarMarca();
+    },
     guardar() {
       if (this.edit === false) {
         this.registrar();
@@ -400,11 +404,23 @@ export default {
       this.indiceEditar = producto.Codigo;
       this.codigoEditar = producto.Codigo;
       this.edit = true;
+      this.mostrarCategoria();
+      this.mostrarMarca();
       this.mostrarProducto(producto.Codigo).then(() => {
         this.dialog = true;
       });
     },
+    mostrarCategoria() {
+      get("productocategoria").then((data) => {
+        this.optionsCategoria = data;
+      });
+    },
 
+    mostrarMarca() {
+      get("productomarca").then((data) => {
+        this.optionsMarca = data;
+      });
+    },
     async mostrarProducto(codigo) {
       const producto = await get("producto/" + codigo);
       this.CodigoCategoria = producto.CodigoCategoria;

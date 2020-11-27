@@ -48,8 +48,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -58,8 +56,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -68,8 +64,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -78,8 +72,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -88,8 +80,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -98,8 +88,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -108,8 +96,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -118,8 +104,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -128,8 +112,6 @@ const routes = [
     component: () => import("../views/Categoria.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -138,8 +120,6 @@ const routes = [
     component: () => import("../views/Producto.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -148,8 +128,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -158,8 +136,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -168,8 +144,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -178,8 +152,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -188,8 +160,6 @@ const routes = [
     component: () => import("../views/Local.vue"),
     meta: {
       auth: true,
-      admin: true,
-      personal: false
     },
   },
   {
@@ -206,9 +176,18 @@ const routes = [
     component: () => import("../views/ConfigUsuario.vue"),
     meta: {
       auth: true,
+    },
+  },
+  {
+    path: "/miPerfil",
+    name: "Mi Perfil",
+    component: () => import("../views/MiPerfil.vue"),
+    meta: {
+      auth: true,
       admin: true,
       personal: false
     },
+
   },
 ]
 
