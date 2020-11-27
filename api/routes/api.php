@@ -45,7 +45,8 @@ Route::patch('usuario/{id}', [UsuarioController::class, 'cambiarVigencia'])->mid
 Route::put('reestablecer/{id}', [UsuarioController::class, 'reestablecerContraseña'])->middleware('token');
 Route::post('usuarioDatos', [UsuarioController::class, 'datosUsuario'])->middleware('token');
 Route::put('actualizarDatos/{id}', [UsuarioController::class, 'actualizarDatosUsuario'])->middleware('token');
-
+Route::post('consultarC', [UsuarioController::class, 'consultarContraseña'])->middleware('token');
+Route::put('cambiarContras/{id}', [UsuarioController::class, 'cambiarContraseña'])->middleware('token');
 //* CRUD DE LOCAL
 Route::post('local', [LocalController::class, 'registrar'])->middleware('token');
 Route::get('locales/{Codigo}', [LocalController::class, 'leer'])->middleware('token');

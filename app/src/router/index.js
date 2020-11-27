@@ -187,6 +187,16 @@ const routes = [
       admin: true,
       personal: false
     },
+  },
+  {
+    path: "/cambiarContrase",
+    name: "Cambiar Mi Contraseña",
+    component: () => import("../views/CambiarMiContraseña.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
 
   },
 ]

@@ -321,4 +321,24 @@ class UsuarioController extends Controller
 
         return response()->json($personal, 200);
     }
+
+    public function consultarContraseña(Request $request)
+    {
+        $idusuario = $request->get('usuario');
+        $usuario = Usuario::findOrFail($idusuario);
+        if (Hash::check($request->get('clave'), $usuario->Clave)) {
+            return response()->json($usuario, 200);
+        } else {
+            return response()->json(array("msg" => "Contraseña no coincide."), 404);
+        }
+    }
+
+    public function cambiarContraseña(Request $request,$id)
+    {
+        $usuario = Usuario::findOrFail($id);
+        $usuario->Clave = Hash::make($request->get('clave'));
+        $usuario->save();
+
+        return response()->json($usuario, 200);
+    }
 }
