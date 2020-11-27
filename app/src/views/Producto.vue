@@ -21,32 +21,39 @@
     </v-row>
     <v-dialog v-model="dialog" persistent scrollable max-width="60vw">
       <v-card>
-        <v-card-title class="headline indigo darken-4">
-          <span v-if="edit" class="headline" style="color: white"
-            >Editar Producto</span
+        <v-card-title
+          class="headline"
+          style="
+            border-left: 5px solid #1a237e !important;
+            color: #90a4ae !important;
+            background: #e8eaf6 !important;
+          "
+        >
+          <v-icon v-if="edit" style="color: #90a4ae !important"
+            >mdi-account-settings</v-icon
           >
-          <span v-else class="headline" style="color: white"
-            >Nuevo Producto</span
+          <v-icon v-else style="color: #90a4ae !important"
+            >mdi-account-plus</v-icon
           >
+          <h6 v-if="edit" class="pl-3">Editar Producto</h6>
+          <h6 v-else class="pl-3">Nuevo Producto</h6>
         </v-card-title>
         <v-card-text>
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-row>
               <v-col cols="6">
-                <v-select
-                  :items="optionsCategoria"
-                  v-model="CodigoCategoria"
-                  label="Código Categoria"
-                  prepend-icon="mdi-tag"
-                  dense
+                <v-text-field
+                  v-model="Nombre"
                   :rules="[fieldRules.required]"
-                ></v-select>
+                  label="Nombre *"
+                  prepend-icon="mdi-note-text"
+                ></v-text-field>
               </v-col>
               <v-col cols="6">
                 <v-select
                   :items="optionsMarca"
                   v-model="CodigoMarca"
-                  label="Código Marca"
+                  label="Marca"
                   prepend-icon="mdi-tag"
                   dense
                   :rules="[fieldRules.required]"
@@ -56,12 +63,14 @@
 
             <v-row>
               <v-col cols="6">
-                <v-text-field
-                  v-model="Nombre"
+                <v-select
+                  :items="optionsCategoria"
+                  v-model="CodigoCategoria"
+                  label="Categoria"
+                  prepend-icon="mdi-clipboard"
+                  dense
                   :rules="[fieldRules.required]"
-                  label="Nombre *"
-                  prepend-icon="mdi-nombre"
-                ></v-text-field>
+                ></v-select>
               </v-col>
               <v-col class="d-flex" cols="12" sm="6">
                 <v-select
@@ -69,24 +78,30 @@
                   v-model="Tipo"
                   :rules="[fieldRules.required]"
                   label="Tipo *"
-                  outlined
+                  prepend-icon="mdi-buffer"
+                  dense
                 ></v-select>
               </v-col>
             </v-row>
 
             <v-row>
-              <v-col class="d-flex" cols="12" sm="6">
+              <v-col class="d-flex" cols="6">
                 <v-select
                   :items="itemsTipoControl"
                   v-model="TipoControl"
                   :rules="[fieldRules.required]"
-                  label="Tipo Control *"
-                  outlined
+                  label="Control *"
+                  prepend-icon="mdi-book-open-page-variant"
+                  class="pt-2"
+                  dense
                 ></v-select>
               </v-col>
-              <!------------------------------------------------------------------------- - -->
-              <!------------------------------------------------------------------------- v-model="checkbox" :label="`Negociable`"></!------------------------------------------------------------------------->
-              <!------------------------------------------------------------------------- - -->
+              <v-col class="d-flex" cols="6">
+                <v-checkbox
+                  v-model="checkbox"
+                  :label="`Negociable`"
+                ></v-checkbox>
+              </v-col>
             </v-row>
           </v-form>
           <span class="red--text">(*) Campos Obligatorios</span>
