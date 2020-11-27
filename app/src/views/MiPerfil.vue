@@ -107,7 +107,7 @@
                           v-model="sistemaP"
                           label="Sistema Pensiones"
                           disabled
-                          prepend-icon="mdi-coin"
+                          prepend-icon="mdi-bank"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" class="d-flex">
