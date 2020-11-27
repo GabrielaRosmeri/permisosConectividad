@@ -85,7 +85,14 @@ class ProductoController extends Controller
         $producto = DB::table('producto as p')
             ->join('categoria as c', 'c.Codigo', '=', 'p.CodigoCategoria')
             ->join('marca as m', 'm.Codigo', '=', 'p.CodigoMarca')
-            ->select('p.Codigo', 'c.Nombre as nombreCategoria', 'm.Nombre as nombreMarca', 'p.Nombre as nombreProducto', 'p.Tipo as Tipo', 'p.Vigencia')
+            ->select(
+                'p.Codigo',
+                'c.Nombre as nombreCategoria',
+                'm.Nombre as nombreMarca',
+                'p.Nombre as nombreProducto',
+                DB::raw('CASE WHEN(p.Tipo = "S") THEN ("SERVICIO") ELSE ("BIEN") END AS Tipo'),
+                'p.Vigencia'
+            )
             ->where('c.CodigoEmpresa', '=', $request->get('empresa'))
             ->Where($atributo, 'like', "%{$busqueda}%")
             ->get();
