@@ -425,8 +425,9 @@ export default {
         this.dialog = true;
       });
     },
+
     mostrarCategoria() {
-      get("productocategoria").then((data) => {
+      post("productocategoria", this.assembleEmpresa()).then((data) => {
         this.optionsCategoria = data;
       });
     },

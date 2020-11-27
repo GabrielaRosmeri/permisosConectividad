@@ -107,11 +107,12 @@ class ProductoController extends Controller
     }
 
     // MOSTRAR CATEGORIA
-    public function mostrarCategoria()
+    public function mostrarCategoria(Request $request)
     {
         $respuesta = [];
         $categoria = DB::table('categoria as c')
             ->select('c.Codigo', 'c.Nombre')
+            ->where('c.CodigoEmpresa', '=', $request->get('empresa'))
             ->get();
         foreach ($categoria as $c) {
             array_push($respuesta, array("value" => $c->Codigo, "text" => $c->Nombre));
