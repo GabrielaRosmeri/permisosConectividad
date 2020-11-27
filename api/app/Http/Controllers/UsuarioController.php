@@ -39,7 +39,7 @@ class UsuarioController extends Controller
             return response()->json($validacion, 400);
         }
         // ? BUSCAR NOMBRE INGRESANDO POR EL USUARIO
-        $usuario = Usuario::where('Nombre', '=', $request->get('Nombre'))->get()->first();
+        $usuario = Usuario::where('Nombre', '=', $request->get('Nombre'))->where('Vigencia', '=', 1)->get()->first();
         if ($usuario) {
             // ? COMPARAR CLAVE
             if (Hash::check($request->get('Clave'), $usuario->Clave)) {
