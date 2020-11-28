@@ -1,11 +1,11 @@
 <template>
   <v-container style="padding: 0px">
     <v-row class="pa-5 align-center">
-      <v-col>
+      <!-- <v-col>
         <v-btn fab large dark color="blue " @click="dialogEjemplo = true">
           <v-icon>mdi-plus</v-icon>
         </v-btn>
-      </v-col>
+      </v-col> -->
       <v-col cols="11">
         <h2 class="font-weight-bold text-center">Mantenimiento de Personal</h2>
       </v-col>
@@ -13,14 +13,22 @@
 
     <v-dialog v-model="dialogEjemplo" persistent scrollable max-width="60vw">
       <v-card>
-        <v-card-title class="headline indigo darken-4">
-          <span v-if="edit" class="headline" style="color: white"
-            >Editar Personal</span
+        <v-card-title
+          class="headline"
+          style="
+            border-left: 5px solid #1a237e !important;
+            color: #90a4ae !important;
+            background: #e8eaf6 !important;
+          "
+        >
+          <v-icon v-if="edit" style="color: #90a4ae !important"
+            >mdi-account-settings</v-icon
           >
-
-          <span v-else class="headline" style="color: white"
-            >Nuevo Personal</span
+          <v-icon v-else style="color: #90a4ae !important"
+            >mdi-account-plus</v-icon
           >
+          <h6 v-if="edit" class="pl-3">Editar Personal</h6>
+          <h6 v-else class="pl-3">Nuevo Personal</h6>
         </v-card-title>
 
         <v-card-text>
@@ -233,206 +241,223 @@
 
     <v-dialog v-model="dialogEditar" persistent scrollable max-width="60vw">
       <v-card>
-        <v-card-title class="headline indigo darken-4">
-          <span v-if="edit" class="headline" style="color: white"
-            >Editar Personal</span
+        <v-card-title
+          class="headline"
+          style="
+            border-left: 5px solid #1a237e !important;
+            color: #90a4ae !important;
+            background: #e8eaf6 !important;
+          "
+        >
+          <v-icon v-if="edit" style="color: #90a4ae !important"
+            >mdi-account-settings</v-icon
           >
-          <span v-else class="headline" style="color: white"
-            >Nuevo Personal</span
+          <v-icon v-else style="color: #90a4ae !important"
+            >mdi-account-plus</v-icon
           >
+          <h6 v-if="edit" class="pl-3">Editar Personal</h6>
+          <h6 v-else class="pl-3">Nuevo Personal</h6>
         </v-card-title>
         <v-card-text>
-          <v-form ref="form" v-model="valid" lazy-validation>
-            <v-sheet elevation="2">
-              <v-tabs
-                v-model="model"
-                background-color="cyan"
-                dark
-                next-icon="mdi-arrow-right-bold-box-outline"
-                prev-icon="mdi-arrow-left-bold-box-outline"
-                show-arrows
-              >
-                <v-tabs-slider color="yellow"></v-tabs-slider>
-                <v-tab v-for="i in 2" :key="i" :href="`#tab-${i}`">
-                  <v-card-text v-if="i == 1">DATOS PERSONALES</v-card-text>
-                  <v-card-text v-else>DATOS LABORALES</v-card-text>
-                </v-tab>
-              </v-tabs>
-            </v-sheet>
-            <v-tabs-items v-model="model">
-              <v-tab-item v-for="i in 2" :key="i" :value="`tab-${i}`">
-                <v-card flat>
-                  <v-card-text v-if="i == 1">
-                    <div align="center">
-                      <br />
-                      <h2>DATOS PERSONALES</h2>
-                    </div>
-                    <v-row>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="Nombres"
-                          :rules="[fieldRules.required]"
-                          label="Nombres*"
-                          type="text"
-                          prepend-icon="mdi-border-color"
-                        >
-                        </v-text-field>
-                      </v-col>
+            <v-col cols="12">
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <v-sheet elevation="2">
+                  <v-tabs
+                    v-model="model"
+                    background-color="cyan"
+                    dark
+                    next-icon="mdi-arrow-right-bold-box-outline"
+                    prev-icon="mdi-arrow-left-bold-box-outline"
+                    show-arrows
+                  >
+                    <v-tabs-slider color="yellow"></v-tabs-slider>
+                    <v-tab v-for="i in 2" :key="i" :href="`#tab-${i}`">
+                      <v-card-text v-if="i == 1">DATOS PERSONALES</v-card-text>
+                      <v-card-text v-else>DATOS LABORALES</v-card-text>
+                    </v-tab>
+                  </v-tabs>
+                </v-sheet>
+                <v-tabs-items v-model="model">
+                  <v-tab-item v-for="i in 2" :key="i" :value="`tab-${i}`">
+                    <v-card flat>
+                      <v-card-text v-if="i == 1">
+                        <div align="center">
+                          <br />
+                          <h2>DATOS PERSONALES</h2>
+                        </div>
+                        <v-row>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="Nombres"
+                              :rules="[fieldRules.required]"
+                              label="Nombres*"
+                              type="text"
+                              prepend-icon="mdi-border-color"
+                            >
+                            </v-text-field>
+                          </v-col>
 
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="ApellidoPaterno"
-                          :rules="[fieldRules.required]"
-                          label="Apellido Paterno*"
-                          prepend-icon="mdi-border-color"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="ApellidoMaterno"
-                          :rules="[fieldRules.required]"
-                          label="Apellido Materno*"
-                          type="text"
-                          prepend-icon="mdi-border-color"
-                        >
-                        </v-text-field>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-combobox
-                          v-model="Siglas"
-                          :items="auxListaSNP"
-                          label="Sistema Nacional de Pensiones*"
-                          prepend-icon="mdi-domain"
-                        ></v-combobox>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="6">
-                        <v-combobox
-                          v-model="Documento"
-                          :items="auxListaDocumento"
-                          :rules="[fieldRules.required, fieldRules.validarDP]"
-                          type="text"
-                          label="Tipo de Documento Personal*"
-                          prepend-icon="mdi-account-box"
-                        >
-                        </v-combobox>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="NumeroDocumento"
-                          :rules="[fieldRules.validarCantidadNro]"
-                          label="N° Documento*"
-                          type="number"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="Direccion"
-                          :rules="[fieldRules.required]"
-                          label="Dirección*"
-                          prepend-icon="mdi-domain"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="Telefono"
-                          label="Teléfono"
-                          type="text"
-                          maxlength="10"
-                          prepend-icon="mdi-phone"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="Correo"
-                          :rules="[fieldRules.required, fieldRules.email]"
-                          label="Correo*"
-                          prepend-icon="mdi-email"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="Celular"
-                          :rules="[fieldRules.required, fieldRules.numCel]"
-                          label="Celular*"
-                          type="text"
-                          maxlength="9"
-                          prepend-icon="mdi-cellphone-iphone"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
-                  <v-card-text v-else>
-                    <div align="center">
-                      <br />
-                      <h2>DATOS LABORALES</h2>
-                    </div>
-                    <v-row>
-                      <v-col cols="6">
-                        <v-combobox
-                          v-model="Local"
-                          :items="localNombre"
-                          :rules="[fieldRules.required, fieldRules.vallocal]"
-                          type="text"
-                          label="Local*"
-                          prepend-icon="mdi-home"
-                        >
-                        </v-combobox>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="Cargo"
-                          :rules="[fieldRules.required]"
-                          label="Cargo*"
-                          type="text"
-                          maxlength="9"
-                          prepend-icon="mdi-account"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="Sueldo"
-                          :rules="[fieldRules.required]"
-                          label="Sueldo*"
-                          prepend-icon="mdi-currency-usd"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="CorreoEmpresarial"
-                          :rules="[fieldRules.required, fieldRules.email]"
-                          label="Correo empresarial*"
-                          type="text"
-                          prepend-icon="mdi-email"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="CelularEmpresarial"
-                          :rules="[fieldRules.required, fieldRules.numCel]"
-                          label="Celular empresarial*"
-                          type="text"
-                          maxlength="9"
-                          prepend-icon="mdi-cellphone-iphone"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-            </v-tabs-items>
-          </v-form>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="ApellidoPaterno"
+                              :rules="[fieldRules.required]"
+                              label="Apellido Paterno*"
+                              prepend-icon="mdi-border-color"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="ApellidoMaterno"
+                              :rules="[fieldRules.required]"
+                              label="Apellido Materno*"
+                              type="text"
+                              prepend-icon="mdi-border-color"
+                            >
+                            </v-text-field>
+                          </v-col>
+                          <v-col cols="6">
+                            <v-combobox
+                              v-model="Siglas"
+                              :items="auxListaSNP"
+                              label="Sistema Nacional de Pensiones*"
+                              prepend-icon="mdi-domain"
+                            ></v-combobox>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="6">
+                            <v-combobox
+                              v-model="Documento"
+                              :items="auxListaDocumento"
+                              :rules="[
+                                fieldRules.required,
+                                fieldRules.validarDP,
+                              ]"
+                              type="text"
+                              label="Tipo de Documento Personal*"
+                              prepend-icon="mdi-account-box"
+                            >
+                            </v-combobox>
+                          </v-col>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="NumeroDocumento"
+                              :rules="[fieldRules.validarCantidadNro]"
+                              label="N° Documento*"
+                              type="number"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="Direccion"
+                              :rules="[fieldRules.required]"
+                              label="Dirección*"
+                              prepend-icon="mdi-domain"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="Telefono"
+                              label="Teléfono"
+                              type="text"
+                              maxlength="10"
+                              prepend-icon="mdi-phone"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="Correo"
+                              :rules="[fieldRules.required, fieldRules.email]"
+                              label="Correo*"
+                              prepend-icon="mdi-email"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="Celular"
+                              :rules="[fieldRules.required, fieldRules.numCel]"
+                              label="Celular*"
+                              type="text"
+                              maxlength="9"
+                              prepend-icon="mdi-cellphone-iphone"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                      <v-card-text v-else>
+                        <div align="center">
+                          <br />
+                          <h2>DATOS LABORALES</h2>
+                        </div>
+                        <v-row>
+                          <v-col cols="6">
+                            <v-combobox
+                              v-model="Local"
+                              :items="localNombre"
+                              :rules="[
+                                fieldRules.required,
+                                fieldRules.vallocal,
+                              ]"
+                              type="text"
+                              label="Local*"
+                              prepend-icon="mdi-home"
+                            >
+                            </v-combobox>
+                          </v-col>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="Cargo"
+                              :rules="[fieldRules.required]"
+                              label="Cargo*"
+                              type="text"
+                              maxlength="9"
+                              prepend-icon="mdi-account"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="Sueldo"
+                              :rules="[fieldRules.required]"
+                              label="Sueldo*"
+                              prepend-icon="mdi-currency-usd"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="CorreoEmpresarial"
+                              :rules="[fieldRules.required, fieldRules.email]"
+                              label="Correo empresarial*"
+                              type="text"
+                              prepend-icon="mdi-email"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="CelularEmpresarial"
+                              :rules="[fieldRules.required, fieldRules.numCel]"
+                              label="Celular empresarial*"
+                              type="text"
+                              maxlength="9"
+                              prepend-icon="mdi-cellphone-iphone"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-tab-item>
+                </v-tabs-items>
+              </v-form>
+            </v-col>
           <span class="red--text">(*) Campos Obligatorios</span>
         </v-card-text>
         <v-card-actions>
@@ -453,7 +478,17 @@
       </v-card>
     </v-dialog>
 
-    <v-card>
+    <v-col cols="12" align="end">
+      <v-btn
+        color="indigo darken-4 white--text"
+        elevation="5"
+        @click="dialogEjemplo = true"
+      >
+        <v-icon left dark>mdi-plus</v-icon>
+        Personal
+      </v-btn>
+    </v-col>
+    <v-card style="border-top: 5px solid #1a237e !important">
       <v-card-title>
         <v-spacer></v-spacer>
         <v-row>
@@ -610,37 +645,37 @@ export default {
           text: "N°",
           value: "Codigo",
           sortable: false,
-          class: "light blue darken-4 white--text",
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Nombres",
           value: "Nombres",
           sortable: false,
-          class: "light blue darken-4 white--text",
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Documento",
           value: "Documento",
           sortable: false,
-          class: "light blue darken-4 white--text",
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Celular",
           value: "Celular",
           sortable: false,
-          class: "light blue darken-4 white--text",
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Local",
           value: "Local",
           sortable: false,
-          class: "light blue darken-4 white--text",
+          class: "indigo darken-4 white--text",
         },
         {
           text: "Acciones",
           value: "actions",
           width: "15%",
-          class: "light blue darken-4 white--text",
+          class: "indigo darken-4 white--text",
         },
       ],
       listapersonal01: [],
@@ -973,6 +1008,7 @@ export default {
         } else {
           let ban02 = 0;
           ban02 = this.validarDoc();
+          console.log(ban02);
           if (ban02 == 0) {
             Swal.fire({
               position: "top-center",
