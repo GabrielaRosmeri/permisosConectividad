@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\DocumentoPersonalController;
 use App\Http\Controllers\LocalController;
+use App\Http\Controllers\LocalPersonalController;
 use App\Http\Controllers\PermisoUsuarioController;
+use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\SistemaPensionesController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -71,3 +75,30 @@ Route::patch('producto/{id}', [ProductoController::class, 'cambiarVigencia'])->m
 Route::post('productocategoria', [ProductoController::class, 'mostrarCategoria'])->middleware('token');
 Route::get('productomarca', [ProductoController::class, 'mostrarMarca'])->middleware('token');
 //* *********************************************************
+
+//? ****************** INTEGRACIÓN DEL EQUIPO DE PATITO **************************************************
+//* CRUD DE PERSONAL */
+Route::get('personal/{id}', [PersonalController::class, 'leer'])->middleware('token');
+Route::post('personal/{txt}/{op}', [PersonalController::class, 'listar'])->middleware('token');
+Route::post('personal', [PersonalController::class, 'registrar'])->middleware('token');
+Route::put('personal/{id}', [PersonalController::class, 'actualizar'])->middleware('token');
+Route::patch('personal/{id}', [PersonalController::class, 'cambiarVigencia'])->middleware('token');
+//* AGREGADOR
+Route::get('personalvigentes', [PersonalController::class, 'listarVigente'])->middleware('token');
+
+//* LOCAL 
+Route::get('localvigente', [LocalController::class, 'listarVigente'])->middleware('token');
+Route::get('localusuario/{id}', [LocalController::class, 'local'])->middleware('token');
+
+//* LOCAL PERSONAL 
+Route::get('localpersonal/{id}', [LocalPersonalController::class, 'leer'])->middleware('token');
+
+//* DOCUMENTO PERSONAL */
+Route::get('documentopersonal', [DocumentoPersonalController::class, 'listar'])->middleware('token');
+Route::get('documentopersonalvigentes', [DocumentoPersonalController::class, 'listarVigente'])->middleware('token');
+Route::get('documentopersonal/{id}', [DocumentoPersonalController::class, 'leer'])->middleware('token');
+Route::post('documentopersonal', [DocumentoPersonalController::class, 'registrar'])->middleware('token');
+Route::put('documentopersonal/{id}', [DocumentoPersonalController::class, 'actualizar'])->middleware('token');
+Route::patch('documentopersonal/{id}', [DocumentoPersonalController::class, 'cambiarVigencia'])->middleware('token');
+//* SISTEMA NACIONAL DE PENSIONES */
+Route::get('sistemadepensionesvigentes', [SistemaPensionesController::class, 'listarVigente'])->middleware('token');

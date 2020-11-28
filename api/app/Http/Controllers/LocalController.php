@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Local;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class LocalController extends Controller
@@ -95,5 +96,30 @@ class LocalController extends Controller
         $Local->save();
 
         return response()->json($vigencia, 200);
+    }
+
+    //* ***************FUNCIONES A IMPLEMENTAR **************//
+    public function listarVigente()
+    {
+        $sql = "SELECT @i:=@i+1 as contador, Codigo, Nombre, Vigencia FROM local
+        CROSS JOIN (SELECT @i := 0) r
+        WHERE Vigencia = 1";
+
+        $data = DB::select($sql);
+
+        return response()->json($data, 200);
+    }
+
+    public function local($id)
+    {
+        $local = Local::findOrFail($id);
+        $idEmpresa = $local->CodigoEmpresa;
+
+        $sql = "SELECT Codigo, Nombre FROM local
+        WHERE Vigencia = 1 and CodigoEmpresa = " . $idEmpresa . " ORDER BY Nombre asc";
+
+        $data = DB::select($sql);
+
+        return response()->json($data, 200);
     }
 }

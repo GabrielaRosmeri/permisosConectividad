@@ -199,6 +199,17 @@ const routes = [
     },
 
   },
+  {
+    path: "/personal",
+    name: "Personal",
+    component: () => import("../views/Personal.vue"),
+    meta: {
+      auth: true,
+      admin: true,
+      personal: false
+    },
+
+  },
 ]
 
 const router = new VueRouter({
