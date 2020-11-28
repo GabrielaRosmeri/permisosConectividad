@@ -156,7 +156,7 @@
                     <v-text-field
                       v-model="txtBuscar"
                       :rules="[fieldRules.required]"
-                      label="Buscar"
+                      label="Búsqueda"
                       class="pt-8"
                       single-line
                     ></v-text-field>

@@ -53,7 +53,7 @@
               <v-col cols="6">
                 <v-text-field
                   v-model="Descripcion"
-                  label="Descripcion *"
+                  label="Descripción *"
                   maxlength="100"
                   prepend-icon="mdi-domain"
                   required
@@ -190,7 +190,7 @@ export default {
           class: "indigo darken-4 white--text",
         },
         {
-          text: "Descripcion",
+          text: "Descripción",
           value: "Descripcion",
           width: "30%",
           class: "indigo darken-4 white--text",

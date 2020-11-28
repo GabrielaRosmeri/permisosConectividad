@@ -52,7 +52,7 @@
                     >
                       <v-text-field
                         v-model="busqueda"
-                        label="Search"
+                        label="Búsqueda"
                         single-line
                         hide-details
                         :rules="[fieldRules.required]"
